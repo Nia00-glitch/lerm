@@ -1,0 +1,15 @@
+# Minimum for the layers in this repo (L0/L1/L4/KB/guardrails).
+numpy>=2.0
+scipy>=1.14
+pandas>=2.2
+PyYAML>=6.0
+duckdb>=1.1
+pytest>=8.0
+
+# Added per phase, not up front. Pin exact versions into requirements.lock
+# with `pip freeze > requirements.lock` and commit it (spec §3).
+# P1: mlflow>=2.16  dvc>=3.55
+# P2: inspect-ai  inspect-evals  hal-harness (princeton-pli/hal-harness)
+# P3: ray[default]>=2.35  skypilot>=0.6  vllm>=0.6
+# P2: litellm>=1.48        # behind OmniRoute, not replacing it
+# P7: pyalex  paper-qa

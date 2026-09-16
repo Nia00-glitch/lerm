@@ -1,0 +1,12 @@
+# secrets — never tracked
+.env
+*.key
+state/
+# derived artifacts (rebuildable from JSONL)
+store/
+__pycache__/
+*.pyc
+.venv/
+# traces are large; track via DVC, not git
+traces/
+!traces/.gitkeep

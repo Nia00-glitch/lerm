@@ -1,0 +1,125 @@
+causal_verdict: CAUSAL_ELIGIBLE
+conditions:
+- B_extra_retries
+- C_independent_verifier
+confounds_checked:
+- equal_compute_wallclock
+- equal_tokens
+- equal_attempts
+- equal_cost
+- same_model_version
+- no_model_drift_within_experiment
+- comparable_task_order
+- same_seed_policy
+- same_task_set
+- no_human_intervention
+cost:
+  gpu_hours: 0.0
+  usd: 2.52
+  wallclock: 19.989
+created_utc: '2026-09-16T16:52:08.162078+00:00'
+effect_size:
+  ci_high: 0.28221230158730154
+  ci_low: 0.06746031746031746
+  value: 0.17513227513227517
+false_accept_rate: 0.050955414012738856
+false_reject_rate: 0.03611738148984198
+human_signoff: false
+hypothesis: Independent verification in the loop improves pass^5 verified success
+  more than an equal-compute increase in retries, on the private held-out set.
+hypothesis_key: 938cd9065bb5e5a1
+id: LE-0001
+k_reruns: 5
+models:
+- qwen/qwen3-coder-480b
+n_runs: 1200
+next_questions:
+- does the effect survive on a second model family?
+- does verifier FAR grow with task horizon?
+preregistration: preregistrations/LE-0001.yaml
+primary_metric: verified_success_pass_k
+replications: []
+scope_limits: holds only for the 60-task private holdout under the compute budget
+  in the prereg; untested beyond one model family
+skeptic_attempts:
+- attack: 1_replication_new_seeds
+  detail: no execution plane wired; cannot re-run with fresh seeds
+  status: NEEDS_EXECUTION
+- attack: 2_confound_search
+  detail: all confound checks passed
+  status: SURVIVED
+- attack: 3_shortcut_hunt
+  detail: no shortcut pattern in 1200 runs
+  status: SURVIVED
+- attack: 4_alternative_explanation
+  detail: no execution plane wired; alternative explanation not testable yet
+  status: NEEDS_EXECUTION
+- attack: 5_noise_check
+  detail: CI lower bound +0.067 clears threshold +0.050
+  status: SURVIVED
+status: UNCERTAIN
+tasks:
+  private_holdout_n: 0
+  public:
+  - HOLDOUT-000
+  - HOLDOUT-001
+  - HOLDOUT-002
+  - HOLDOUT-003
+  - HOLDOUT-004
+  - HOLDOUT-005
+  - HOLDOUT-006
+  - HOLDOUT-007
+  - HOLDOUT-008
+  - HOLDOUT-009
+  - HOLDOUT-010
+  - HOLDOUT-011
+  - HOLDOUT-012
+  - HOLDOUT-013
+  - HOLDOUT-014
+  - HOLDOUT-015
+  - HOLDOUT-016
+  - HOLDOUT-017
+  - HOLDOUT-018
+  - HOLDOUT-019
+  - HOLDOUT-020
+  - HOLDOUT-021
+  - HOLDOUT-022
+  - HOLDOUT-023
+  - HOLDOUT-024
+  - HOLDOUT-025
+  - HOLDOUT-026
+  - HOLDOUT-027
+  - HOLDOUT-028
+  - HOLDOUT-029
+  - HOLDOUT-030
+  - HOLDOUT-031
+  - HOLDOUT-032
+  - HOLDOUT-033
+  - HOLDOUT-034
+  - HOLDOUT-035
+  - HOLDOUT-036
+  - HOLDOUT-037
+  - HOLDOUT-038
+  - HOLDOUT-039
+  - HOLDOUT-040
+  - HOLDOUT-041
+  - HOLDOUT-042
+  - HOLDOUT-043
+  - HOLDOUT-044
+  - HOLDOUT-045
+  - HOLDOUT-046
+  - HOLDOUT-047
+  - HOLDOUT-048
+  - HOLDOUT-049
+  - HOLDOUT-050
+  - HOLDOUT-051
+  - HOLDOUT-052
+  - HOLDOUT-053
+  - HOLDOUT-054
+  - HOLDOUT-055
+  - HOLDOUT-056
+  - HOLDOUT-057
+  - HOLDOUT-058
+  - HOLDOUT-059
+unexplained: why the reliability gap between pass@k and pass^k is larger for C than
+  for B is not explained by the verifier FAR alone

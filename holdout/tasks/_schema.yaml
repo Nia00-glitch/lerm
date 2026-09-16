@@ -1,0 +1,25 @@
+id: HOLDOUT-000                 # stable, never reused
+category: recovery_after_failure | long_horizon_state | tool_misuse_trap | unreliable_verifier
+created_utc: ""
+author: ""
+public: false                   # must stay false; gates reporting
+horizon_steps: 0                # expected minimum steps
+setup:
+  image: ""                     # exact container image digest, not a tag
+  files: []                     # fixtures materialised into the sandbox
+  induced_failure:              # null for categories without one
+    at_step: null
+    kind: ""                    # tool_returns_wrong | file_deleted | dep_broken | network_flake
+instruction: ""                 # exactly what the agent is told, verbatim
+ground_truth_checker:
+  entrypoint: ""                # script run AFTER the agent stops, in a clean container
+  reads_agent_claim: false      # must be false
+  timeout_s: 300
+in_loop_verifier:
+  present: true
+  induced_error_rate: 0.0       # >0 only for the unreliable_verifier category
+shortcut_pilot:
+  run_utc: ""
+  shortcuts_found: []           # if non-empty, fix the task before use
+scoring: binary                 # binary only; partial credit hides reliability collapse
+notes: ""
