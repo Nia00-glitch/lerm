@@ -126,4 +126,15 @@ def check_conditions(
         f"{len(touched)} run(s) flagged" + (f": {touched[:3]}" if touched else ""),
     ))
 
+    # 11. Fixture reset confirmed — verify no state leakage from prior trials.
+    mismatched_fixtures = [
+        r.get("run_id") for r in c + t
+        if r.get("canonical_fixture_hash") is not None and r.get("fixture_hash") != r.get("canonical_fixture_hash")
+    ]
+    checks.append(Check(
+        "fixture_reset_confirmed",
+        len(mismatched_fixtures) == 0,
+        f"{len(mismatched_fixtures)} run(s) with mismatched or unreset fixture hash" + (f": {mismatched_fixtures[:3]}" if mismatched_fixtures else ""),
+    ))
+
     return ConfoundReport(checks)

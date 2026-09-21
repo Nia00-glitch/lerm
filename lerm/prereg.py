@@ -31,6 +31,7 @@ class Preregistration:
     secondary_metrics: list[str] = field(default_factory=list)
     n_tasks: int = 0
     k_reruns: int = 5
+    n_reruns: int = 10
     tasks_public: list[str] = field(default_factory=list)
     private_holdout_n: int = 0
     models: list[str] = field(default_factory=list)      # exact IDs, pinned
@@ -50,6 +51,11 @@ class Preregistration:
             raise ValueError("need >=2 conditions to compare anything")
         if self.k_reruns < 5:
             raise ValueError("k_reruns must be >=5 — pass^k below k=5 is not informative here")
+        if self.n_reruns < 2 * self.k_reruns:
+            raise ValueError(
+                f"n_reruns ({self.n_reruns}) must be >= 2 * k_reruns ({2 * self.k_reruns}) "
+                f"to power pass^{self.k_reruns} estimation without collapsing to trivial outcomes"
+            )
 
     # ---------------------------------------------------------------- sealing
 

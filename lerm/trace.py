@@ -78,7 +78,10 @@ class RunRecord:
     overhead_s: float = 0.0                # time added by LERM layers, for the <10% budget
     human_intervention: bool = False
     infra_failure: bool = False            # infra died != agent failed
+    data_role: str = "primary"             # historical | calibration | primary | diagnostic
     shortcut_flags: list[str] = field(default_factory=list)
+    fixture_hash: str | None = None
+    canonical_fixture_hash: str | None = None
     llm_calls: list[LLMCall] = field(default_factory=list)
     tool_calls: list[ToolCall] = field(default_factory=list)
     started_utc: str = field(default_factory=_now)

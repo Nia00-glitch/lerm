@@ -5,7 +5,7 @@ conditions:
 - B_extra_retries
 - C_independent_verifier
 content_hash: 6298ae6708d21b447669b4f6f704a18a5619cf29a82e8aaceb91a18aec4ad962
-created_utc: '2026-09-16T16:52:07.681959+00:00'
+created_utc: '2026-09-16T17:11:11.183957+00:00'
 decision_threshold: 0.05
 hypothesis: Independent verification in the loop improves pass^5 verified success
   more than an equal-compute increase in retries, on the private held-out set.

@@ -1,0 +1,32 @@
+alpha: 0.05
+compute_matching: loop_verify is attempt-, token-, and wallclock-matched to loop_retry
+  under a fixed turn ceiling of 3 turns, max token budget of 16000 tokens, and hard
+  wallclock cap of 120.0s per trial enforced by controller
+conditions:
+- loop_retry
+- loop_verify
+content_hash: 11685c2c85c50f852080c563875d6475085895f10e972526e0391cc1c8428d1e
+created_utc: '2026-09-21T07:08:51.801415+00:00'
+decision_threshold: 0.05
+hypothesis: In-loop verification and repair (loop_verify) yields a higher pass^5 verified
+  success rate than compute-matched naive retry (loop_retry) under matched token,
+  turn, and wallclock budgets on held-out code repair tasks.
+id: EXP-LOOP-002
+k_reruns: 5
+models:
+- openrouter/thinkingmachines/inkling-small:free
+n_reruns: 10
+n_tasks: 4
+power: 0.8
+predicted_failure_mode: "loop_verify fails to diagnose subtle test failures or burns\
+  \ turns; n_tasks=4 keeps bootstrap CI wide regardless of reruns \u2014 this experiment\
+  \ is a pilot for pipeline validity, not yet powered for a general causal claim."
+primary_metric: verified_success_pass_k
+private_holdout_n: 4
+secondary_metrics:
+- reliability_gap
+- verifier_false_accept_rate
+- total_tokens
+- wallclock_s
+stopping_rule: fixed_sample_size_k5_n10
+tasks_public: []

@@ -153,6 +153,11 @@ class Skeptic:
         )
 
     def attack_noise(self, effect: st.Effect, threshold: float) -> AttackResult:
+        if getattr(effect, "is_placeholder", False):
+            return AttackResult(
+                "5_noise_check", KILL,
+                f"refusing to evaluate noise on placeholder CI (is_placeholder=True; n_tasks={effect.n_tasks}, k={effect.k})",
+            )
         if effect.crosses_zero():
             return AttackResult(
                 "5_noise_check", KILL,
@@ -194,8 +199,12 @@ class Skeptic:
 
 def _family(model_id: str) -> str:
     m = model_id.lower()
-    for fam in ("claude", "anthropic", "gpt", "openai", "llama", "qwen", "mistral",
-                "deepseek", "gemini", "glm", "kimi"):
+    if "/" in m:
+        provider, model_part = m.split("/", 1)
+        if provider in {"ollama", "openrouter", "openai", "huggingface", "bedrock", "together", "groq"}:
+            m = model_part
+    for fam in ("claude", "anthropic", "gpt", "openai", "qwen", "deepseek", "mistral", "llama",
+                "gemini", "glm", "kimi"):
         if fam in m:
             return "anthropic" if fam == "claude" else ("openai" if fam == "gpt" else fam)
     return m.split("/")[0]

@@ -1,0 +1,137 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 680" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad6" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#080c14" />
+      <stop offset="50%" stop-color="#0e1726" />
+      <stop offset="100%" stop-color="#04070d" />
+    </linearGradient>
+
+    <linearGradient id="roadCard" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+
+    <filter id="shadow6" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="6" flood-color="#000000" flood-opacity="0.5" />
+    </filter>
+  </defs>
+
+  <rect width="1000" height="680" fill="url(#bgGrad6)" rx="16" />
+
+  <!-- Header -->
+  <text x="50" y="50" fill="#f8fafc" font-size="22" font-family="-apple-system, sans-serif" font-weight="700">LERM — RESEARCH &amp; ENGINEERING ROADMAP</text>
+  <text x="50" y="75" fill="#94a3b8" font-size="13" font-family="-apple-system, sans-serif">Progression from Control Plane Foundation to Autonomous Scientific Research Machine</text>
+
+  <!-- 3 MILESTONE COLUMNS -->
+  <g transform="translate(50, 115)">
+    <!-- MILESTONE 1: CURRENT / VERIFIED -->
+    <g transform="translate(0, 0)" filter="url(#shadow6)">
+      <rect width="280" height="490" rx="10" fill="url(#roadCard)" stroke="#10b981" stroke-width="1.8" />
+      <rect x="0" y="0" width="280" height="8" rx="4" fill="#10b981" />
+      
+      <g transform="translate(18, 28)">
+        <rect width="95" height="22" rx="4" fill="#064e3b" stroke="#10b981" />
+        <text x="8" y="15" fill="#a7f3d0" font-size="10" font-family="monospace" font-weight="700">IMPLEMENTED</text>
+      </g>
+      <text x="18" y="75" fill="#f8fafc" font-size="16" font-family="-apple-system, sans-serif" font-weight="700">Phase 0 &amp; 1: Control Plane</text>
+      <text x="18" y="94" fill="#34d399" font-size="12" font-family="monospace">Foundation &amp; Phase C Audit</text>
+
+      <g transform="translate(18, 115)">
+        <text x="0" y="16" fill="#f1f5f9" font-size="12" font-family="-apple-system, sans-serif" font-weight="600">✓ Fail-Closed Data Firewall</text>
+        <text x="12" y="32" fill="#94a3b8" font-size="10" font-family="-apple-system, sans-serif">Historical EXP-LOOP-002 holdouts locked</text>
+
+        <text x="0" y="60" fill="#f1f5f9" font-size="12" font-family="-apple-system, sans-serif" font-weight="600">✓ Sealed Pre-Registrations</text>
+        <text x="12" y="76" fill="#94a3b8" font-size="10" font-family="-apple-system, sans-serif">Cryptographic SHA-256 commit verification</text>
+
+        <text x="0" y="104" fill="#f1f5f9" font-size="12" font-family="-apple-system, sans-serif" font-weight="600">✓ L0 Adversarial Skeptic</text>
+        <text x="12" y="120" fill="#94a3b8" font-size="10" font-family="-apple-system, sans-serif">5-Attack verification against spurious claims</text>
+
+        <text x="0" y="148" fill="#f1f5f9" font-size="12" font-family="-apple-system, sans-serif" font-weight="600">✓ 10-Confound Checklist</text>
+        <text x="12" y="164" fill="#94a3b8" font-size="10" font-family="-apple-system, sans-serif">Mechanical token/clock/drift balancer</text>
+
+        <text x="0" y="192" fill="#f1f5f9" font-size="12" font-family="-apple-system, sans-serif" font-weight="600">✓ Phase C Protocol Freeze</text>
+        <text x="12" y="208" fill="#94a3b8" font-size="10" font-family="-apple-system, sans-serif">SWE-smith 100% bit-reproducible generation</text>
+
+        <text x="0" y="236" fill="#f1f5f9" font-size="12" font-family="-apple-system, sans-serif" font-weight="600">✓ Sequential Guardband</text>
+        <text x="12" y="252" fill="#94a3b8" font-size="10" font-family="-apple-system, sans-serif">0.35 &lt;= p_hat &lt;= 0.65 admission calibration</text>
+
+        <text x="0" y="280" fill="#f1f5f9" font-size="12" font-family="-apple-system, sans-serif" font-weight="600">✓ 20/20 Adversarial Test Suite</text>
+        <text x="12" y="296" fill="#94a3b8" font-size="10" font-family="-apple-system, sans-serif">76/76 unit, integration, &amp; security tests pass</text>
+
+        <text x="0" y="324" fill="#f1f5f9" font-size="12" font-family="-apple-system, sans-serif" font-weight="600">✓ Hardware Resource Eviction</text>
+        <text x="12" y="340" fill="#94a3b8" font-size="10" font-family="-apple-system, sans-serif">Local Ollama RAM manager for 16GB host</text>
+      </g>
+    </g>
+
+    <!-- Arrow 1 -> 2 -->
+    <path d="M 280 245 L 310 245" stroke="#38bdf8" stroke-width="2.5" />
+    <polygon points="306,240 316,245 306,250" fill="#38bdf8" />
+
+    <!-- MILESTONE 2: NEXT RESEARCH MILESTONES -->
+    <g transform="translate(315, 0)" filter="url(#shadow6)">
+      <rect width="280" height="490" rx="10" fill="url(#roadCard)" stroke="#38bdf8" stroke-width="1.8" />
+      <rect x="0" y="0" width="280" height="8" rx="4" fill="#38bdf8" />
+
+      <g transform="translate(18, 28)">
+        <rect width="90" height="22" rx="4" fill="#0c4a6e" stroke="#38bdf8" />
+        <text x="8" y="15" fill="#7dd3fc" font-size="10" font-family="monospace" font-weight="700">PLANNED</text>
+      </g>
+      <text x="18" y="75" fill="#f8fafc" font-size="16" font-family="-apple-system, sans-serif" font-weight="700">Phase 2 &amp; 3: Causal Trials</text>
+      <text x="18" y="94" fill="#38bdf8" font-size="12" font-family="monospace">EXP-LOOP-003 Execution</text>
+
+      <g transform="translate(18, 115)">
+        <text x="0" y="16" fill="#f1f5f9" font-size="12" font-family="-apple-system, sans-serif" font-weight="600">→ Phase D: Fresh Task Pool</text>
+        <text x="12" y="32" fill="#94a3b8" font-size="10" font-family="-apple-system, sans-serif">Generate K=30 candidates from 3 repos</text>
+
+        <text x="0" y="60" fill="#f1f5f9" font-size="12" font-family="-apple-system, sans-serif" font-weight="600">→ Calibration Execution</text>
+        <text x="12" y="76" fill="#94a3b8" font-size="10" font-family="-apple-system, sans-serif">2-stage sequential screen without feedback</text>
+
+        <text x="0" y="104" fill="#f1f5f9" font-size="12" font-family="-apple-system, sans-serif" font-weight="600">→ EXP-LOOP-003 Primary Trial</text>
+        <text x="12" y="120" fill="#94a3b8" font-size="10" font-family="-apple-system, sans-serif">N &gt;= 20 admitted tasks x 5 reruns (k=5)</text>
+
+        <text x="0" y="148" fill="#f1f5f9" font-size="12" font-family="-apple-system, sans-serif" font-weight="600">→ Paired pass^5 Causal Analysis</text>
+        <text x="12" y="164" fill="#94a3b8" font-size="10" font-family="-apple-system, sans-serif">Evaluate loop_verify vs loop_retry delta</text>
+
+        <text x="0" y="192" fill="#f1f5f9" font-size="12" font-family="-apple-system, sans-serif" font-weight="600">→ Skeptic Cross-Attack</text>
+        <text x="12" y="208" fill="#94a3b8" font-size="10" font-family="-apple-system, sans-serif">Attack finding with independent model family</text>
+
+        <text x="0" y="236" fill="#f1f5f9" font-size="12" font-family="-apple-system, sans-serif" font-weight="600">→ Multi-Scaffold Benchmarking</text>
+        <text x="12" y="252" fill="#94a3b8" font-size="10" font-family="-apple-system, sans-serif">Compare OpenHands with Aider and custom loop</text>
+      </g>
+    </g>
+
+    <!-- Arrow 2 -> 3 -->
+    <path d="M 595 245 L 625 245" stroke="#a855f7" stroke-width="2.5" />
+    <polygon points="621,240 631,245 621,250" fill="#a855f7" />
+
+    <!-- MILESTONE 3: LONG TERM SYSTEM VISION -->
+    <g transform="translate(630, 0)" filter="url(#shadow6)">
+      <rect width="270" height="490" rx="10" fill="url(#roadCard)" stroke="#a855f7" stroke-width="1.8" />
+      <rect x="0" y="0" width="270" height="8" rx="4" fill="#a855f7" />
+
+      <g transform="translate(18, 28)">
+        <rect width="80" height="22" rx="4" fill="#4c1d95" stroke="#a855f7" />
+        <text x="8" y="15" fill="#d8b4fe" font-size="10" font-family="monospace" font-weight="700">VISION</text>
+      </g>
+      <text x="18" y="75" fill="#f8fafc" font-size="16" font-family="-apple-system, sans-serif" font-weight="700">Phase 4 &amp; 5: Autonomous</text>
+      <text x="18" y="94" fill="#c084fc" font-size="12" font-family="monospace">Closed-Loop AI Scientist</text>
+
+      <g transform="translate(18, 115)">
+        <text x="0" y="16" fill="#f1f5f9" font-size="12" font-family="-apple-system, sans-serif" font-weight="600">★ Continuous Auto-Hypothesis</text>
+        <text x="12" y="32" fill="#94a3b8" font-size="10" font-family="-apple-system, sans-serif">LLM generates loop improvement ideas</text>
+
+        <text x="0" y="60" fill="#f1f5f9" font-size="12" font-family="-apple-system, sans-serif" font-weight="600">★ Autonomous Preregistration</text>
+        <text x="12" y="76" fill="#94a3b8" font-size="10" font-family="-apple-system, sans-serif">Automated metric &amp; power planning</text>
+
+        <text x="0" y="104" fill="#f1f5f9" font-size="12" font-family="-apple-system, sans-serif" font-weight="600">★ SkyPilot Multi-Cloud Cluster</text>
+        <text x="12" y="120" fill="#94a3b8" font-size="10" font-family="-apple-system, sans-serif">Warm Docker pool across spot GPU instances</text>
+
+        <text x="0" y="148" fill="#f1f5f9" font-size="12" font-family="-apple-system, sans-serif" font-weight="600">★ Multi-Agent Skeptic Council</text>
+        <text x="12" y="164" fill="#94a3b8" font-size="10" font-family="-apple-system, sans-serif">Adversarial council with diverse LLM priors</text>
+
+        <text x="0" y="192" fill="#f1f5f9" font-size="12" font-family="-apple-system, sans-serif" font-weight="600">★ Automated Paper Synthesis</text>
+        <text x="12" y="208" fill="#94a3b8" font-size="10" font-family="-apple-system, sans-serif">LaTeX paper drafts from settled KB records</text>
+      </g>
+    </g>
+  </g>
+</svg>

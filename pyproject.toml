@@ -1,0 +1,66 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lerm"
+version = "1.0.0"
+description = "Loop Engineering Research Machine: Causal inference, pre-registered experimentation, and adversarial verification for autonomous software engineering loops."
+readme = "README.md"
+license = { text = "MIT" }
+authors = [
+    { name = "Nia00-glitch" }
+]
+keywords = [
+    "causal-inference",
+    "autonomous-agents",
+    "software-engineering",
+    "ai-agents",
+    "verification",
+    "adversarial-testing",
+    "reproducibility",
+    "pre-registration"
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+]
+requires-python = ">=3.9"
+dependencies = [
+    "numpy>=2.0.0",
+    "scipy>=1.14.0",
+    "PyYAML>=6.0",
+    "pytest>=8.0.0",
+    "libcst>=1.0.0",
+    "astor>=0.8.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "duckdb>=1.1.0",
+    "pandas>=2.2.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/Nia00-glitch/lerm"
+Repository = "https://github.com/Nia00-glitch/lerm"
+Issues = "https://github.com/Nia00-glitch/lerm/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["lerm*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]

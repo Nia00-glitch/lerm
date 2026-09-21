@@ -1,0 +1,116 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 680" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad5" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b0e14" />
+      <stop offset="50%" stop-color="#111827" />
+      <stop offset="100%" stop-color="#05070a" />
+    </linearGradient>
+
+    <linearGradient id="failCardGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1f2937" />
+      <stop offset="100%" stop-color="#111827" />
+    </linearGradient>
+
+    <filter id="shadow5" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="6" flood-color="#000000" flood-opacity="0.5" />
+    </filter>
+  </defs>
+
+  <rect width="1000" height="680" fill="url(#bgGrad5)" rx="16" />
+
+  <!-- Header -->
+  <text x="50" y="50" fill="#f8fafc" font-size="22" font-family="-apple-system, sans-serif" font-weight="700">LERM — FAILURE &amp; RECOVERY FLOW</text>
+  <text x="50" y="75" fill="#94a3b8" font-size="13" font-family="-apple-system, sans-serif">Unmerged 3-Outcome Taxonomy, Hardware Recovery &amp; Kill-Switch Protocols</text>
+
+  <!-- TOP BAR: 3-FIELD UNMERGED TAXONOMY -->
+  <g transform="translate(50, 105)" filter="url(#shadow5)">
+    <rect width="900" height="90" rx="8" fill="url(#failCardGrad)" stroke="#38bdf8" stroke-width="1.5" />
+    <text x="20" y="28" fill="#38bdf8" font-size="11" font-family="monospace" font-weight="700">MANDATORY SPEC §5.1: THREE OUTCOME FIELDS, NEVER MERGED</text>
+    
+    <g transform="translate(20, 42)">
+      <rect width="270" height="36" rx="4" fill="#064e3b" stroke="#10b981" />
+      <text x="12" y="23" fill="#a7f3d0" font-size="12" font-family="monospace" font-weight="700">verified_success: bool</text>
+    </g>
+    <g transform="translate(310, 42)">
+      <rect width="270" height="36" rx="4" fill="#451a03" stroke="#f59e0b" />
+      <text x="12" y="23" fill="#fde68a" font-size="12" font-family="monospace" font-weight="700">infra_failure: bool</text>
+    </g>
+    <g transform="translate(600, 42)">
+      <rect width="280" height="36" rx="4" fill="#7f1d1d" stroke="#ef4444" />
+      <text x="12" y="23" fill="#fecaca" font-size="12" font-family="monospace" font-weight="700">model_failure: bool</text>
+    </g>
+  </g>
+
+  <!-- 3 FAILURE CHANNELS -->
+  <g transform="translate(50, 225)">
+    <!-- CHANNEL 1: HARDWARE & OOM -->
+    <g transform="translate(0, 0)" filter="url(#shadow5)">
+      <rect width="280" height="260" rx="8" fill="url(#failCardGrad)" stroke="#f59e0b" stroke-width="1.5" />
+      <rect x="0" y="0" width="280" height="6" rx="3" fill="#f59e0b" />
+      <text x="16" y="28" fill="#f59e0b" font-size="11" font-family="monospace" font-weight="700">CHANNEL 1: HARDWARE &amp; RAM</text>
+      <text x="16" y="52" fill="#f8fafc" font-size="15" font-family="-apple-system, sans-serif" font-weight="700">OOM &amp; Host Memory Thrash</text>
+
+      <g transform="translate(16, 70)">
+        <text x="0" y="16" fill="#cbd5e1" font-size="12" font-family="-apple-system, sans-serif">Trigger: Host RAM &lt; 2048 MB</text>
+        <text x="0" y="36" fill="#94a3b8" font-size="11" font-family="monospace">Exit code 137 / MemoryPressure</text>
+        
+        <path d="M 0 50 L 248 50" stroke="#374151" stroke-width="1" />
+        
+        <text x="0" y="70" fill="#fbbf24" font-size="12" font-family="-apple-system, sans-serif" font-weight="600">Automated Recovery:</text>
+        <text x="0" y="90" fill="#cbd5e1" font-size="11" font-family="-apple-system, sans-serif">1. Call Ollama /api/generate keep_alive=0</text>
+        <text x="0" y="108" fill="#cbd5e1" font-size="11" font-family="-apple-system, sans-serif">2. Evict 14B models to cold disk</text>
+        <text x="0" y="126" fill="#cbd5e1" font-size="11" font-family="-apple-system, sans-serif">3. Tag infra_failure=True</text>
+        <text x="0" y="150" fill="#10b981" font-size="11" font-family="monospace">Zero Model Skill Distortion</text>
+      </g>
+    </g>
+
+    <!-- CHANNEL 2: AGENT LOOP RUNAWAY -->
+    <g transform="translate(310, 0)" filter="url(#shadow5)">
+      <rect width="280" height="260" rx="8" fill="url(#failCardGrad)" stroke="#ef4444" stroke-width="1.5" />
+      <rect x="0" y="0" width="280" height="6" rx="3" fill="#ef4444" />
+      <text x="16" y="28" fill="#ef4444" font-size="11" font-family="monospace" font-weight="700">CHANNEL 2: TIMEOUT &amp; DRIFT</text>
+      <text x="16" y="52" fill="#f8fafc" font-size="15" font-family="-apple-system, sans-serif" font-weight="700">Turn &amp; Clock Exhaustion</text>
+
+      <g transform="translate(16, 70)">
+        <text x="0" y="16" fill="#cbd5e1" font-size="12" font-family="-apple-system, sans-serif">Trigger: Wallclock &gt; 120.0s or Turns &gt; 3</text>
+        <text x="0" y="36" fill="#94a3b8" font-size="11" font-family="monospace">Controller Token Exhaustion</text>
+        
+        <path d="M 0 50 L 248 50" stroke="#374151" stroke-width="1" />
+        
+        <text x="0" y="70" fill="#f87171" font-size="12" font-family="-apple-system, sans-serif" font-weight="600">Deterministic Halt:</text>
+        <text x="0" y="90" fill="#cbd5e1" font-size="11" font-family="-apple-system, sans-serif">1. Force SIGTERM on agent container</text>
+        <text x="0" y="108" fill="#cbd5e1" font-size="11" font-family="-apple-system, sans-serif">2. Extract partial event trace to L1</text>
+        <text x="0" y="126" fill="#cbd5e1" font-size="11" font-family="-apple-system, sans-serif">3. Tag verified_success=False</text>
+        <text x="0" y="150" fill="#fca5a5" font-size="11" font-family="monospace">Halts Runaway Inference Spend</text>
+      </g>
+    </g>
+
+    <!-- CHANNEL 3: EMERGENCY KILL SWITCH -->
+    <g transform="translate(620, 0)" filter="url(#shadow5)">
+      <rect width="280" height="260" rx="8" fill="url(#failCardGrad)" stroke="#a855f7" stroke-width="1.5" />
+      <rect x="0" y="0" width="280" height="6" rx="3" fill="#a855f7" />
+      <text x="16" y="28" fill="#a855f7" font-size="11" font-family="monospace" font-weight="700">CHANNEL 3: EMERGENCY BRAKE</text>
+      <text x="16" y="52" fill="#f8fafc" font-size="15" font-family="-apple-system, sans-serif" font-weight="700">Spend Cap &amp; state/KILL</text>
+
+      <g transform="translate(16, 70)">
+        <text x="0" y="16" fill="#cbd5e1" font-size="12" font-family="-apple-system, sans-serif">Trigger: Spend &gt; Cap ($25/h) or Drift</text>
+        <text x="0" y="36" fill="#94a3b8" font-size="11" font-family="monospace">touch state/KILL or Canary Tripped</text>
+        
+        <path d="M 0 50 L 248 50" stroke="#374151" stroke-width="1" />
+        
+        <text x="0" y="70" fill="#c084fc" font-size="12" font-family="-apple-system, sans-serif" font-weight="600">Immediate Safe Shutdown:</text>
+        <text x="0" y="90" fill="#cbd5e1" font-size="11" font-family="-apple-system, sans-serif">1. Active trial finishes or halts</text>
+        <text x="0" y="108" fill="#cbd5e1" font-size="11" font-family="-apple-system, sans-serif">2. Ledger checkpoints committed</text>
+        <text x="0" y="126" fill="#cbd5e1" font-size="11" font-family="-apple-system, sans-serif">3. Controller refuses new episodes</text>
+        <text x="0" y="150" fill="#e9d5ff" font-size="11" font-family="monospace">Zero Experiment Corruption</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- FOOTER -->
+  <g transform="translate(50, 520)" filter="url(#shadow5)">
+    <rect width="900" height="80" rx="8" fill="#131d2e" stroke="#334155" />
+    <text x="20" y="30" fill="#94a3b8" font-size="12" font-family="-apple-system, sans-serif" font-weight="600">RECOVERY PRINCIPLE:</text>
+    <text x="20" y="52" fill="#f1f5f9" font-size="12" font-family="-apple-system, sans-serif">Failures must be clean, attributable, and non-hedging. Infrastructure dropouts are mathematically isolated from agent capability ratings.</text>
+  </g>
+</svg>

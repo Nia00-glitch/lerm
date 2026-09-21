@@ -17,7 +17,7 @@ cost:
   gpu_hours: 0.0
   usd: 2.52
   wallclock: 19.989
-created_utc: '2026-09-16T16:52:08.162078+00:00'
+created_utc: '2026-09-16T17:11:23.770865+00:00'
 effect_size:
   ci_high: 0.28221230158730154
   ci_low: 0.06746031746031746

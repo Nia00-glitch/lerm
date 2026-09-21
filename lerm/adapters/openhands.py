@@ -21,7 +21,7 @@ from typing import Any
 from ..trace import RunRecord
 
 DEFAULT_OMNIROUTE = os.environ.get("OMNIROUTE_BASE_URL", "http://host.docker.internal:20128/v1")
-DEFAULT_OPENHANDS = os.environ.get("OPENHANDS_BASE_URL", "http://localhost:3000")
+DEFAULT_OPENHANDS = os.environ.get("OPENHANDS_BASE_URL", "http://127.0.0.1:3000")
 
 
 class AdapterError(RuntimeError):
@@ -133,6 +133,44 @@ class OpenHandsAgent:
 
     def start_conversation(self, instruction: str, model: str, workspace: str,
                            extra: dict | None = None) -> str:
+        # Try v1 first (OpenHands 1.8+)
+        body_v1 = {
+            "initial_message": {
+                "role": "user",
+                "content": [{"type": "text", "text": instruction}],
+                "run": False,
+            },
+            "title": "lerm-eval",
+            **(extra or {}),
+        }
+        if model:
+            body_v1["llm_model"] = model
+        if workspace and not workspace.startswith("/"):
+            body_v1["selected_repository"] = workspace
+        status, body = _request(
+            f"{self.base_url}/api/v1/app-conversations", method="POST", headers=self.headers,
+            body=body_v1,
+        )
+        if status < 400 and isinstance(body, dict):
+            task_id = body.get("id")
+            t_info: dict = {}
+            for _ in range(120):
+                s, t_resp = _request(
+                    f"{self.base_url}/api/v1/app-conversations/start-tasks?ids={task_id}",
+                    headers=self.headers,
+                )
+                if s < 400 and isinstance(t_resp, list) and t_resp and t_resp[0]:
+                    t_info = t_resp[0]
+                    if t_info.get("app_conversation_id"):
+                        return str(t_info["app_conversation_id"])
+                    if str(t_info.get("status")).upper() in {"FAILED", "ERROR"}:
+                        raise AdapterError(f"start task failed: {t_info}")
+                time.sleep(1.0)
+            if t_info and t_info.get("app_conversation_id"):
+                return str(t_info["app_conversation_id"])
+            raise AdapterError(f"timed out waiting for conversation startup: {t_info or task_id}")
+
+        # Fallback to legacy v0 /api/conversations
         status, body = _request(
             f"{self.base_url}/api/conversations", method="POST", headers=self.headers,
             body={"initial_user_msg": instruction, "llm_model": model,
@@ -148,19 +186,64 @@ class OpenHandsAgent:
     def poll(self, conversation_id: str, timeout_s: float = 1800, interval_s: float = 5.0) -> dict:
         deadline = time.time() + timeout_s
         while time.time() < deadline:
+            # Check v1
+            status, body = _request(
+                f"{self.base_url}/api/v1/app-conversations?ids={conversation_id}", headers=self.headers)
+            if status < 400 and isinstance(body, list) and body and body[0]:
+                meta = body[0]
+                exec_state = str(meta.get("execution_status") or meta.get("status") or meta.get("state") or "").lower()
+                if exec_state in {"stopped", "finished", "error", "completed", "idle", "paused"}:
+                    return meta
+            # Check legacy v0
             status, body = _request(
                 f"{self.base_url}/api/conversations/{conversation_id}", headers=self.headers)
             if status < 400 and isinstance(body, dict):
-                state = str(body.get("status") or body.get("state") or "").lower()
-                if state in {"stopped", "finished", "error", "completed"}:
+                state = str(body.get("execution_status") or body.get("status") or body.get("state") or "").lower()
+                if state in {"stopped", "finished", "error", "completed", "idle", "paused"}:
                     return body
             time.sleep(interval_s)
         raise TimeoutError(f"conversation {conversation_id} did not finish in {timeout_s}s")
 
     def events(self, conversation_id: str) -> list[dict]:
+        # Try v1 search
+        status, body = _request(
+            f"{self.base_url}/api/v1/conversation/{conversation_id}/events/search",
+            headers=self.headers, timeout=120)
+        if status < 400 and isinstance(body, dict) and "items" in body:
+            return body["items"]
+        if status < 400 and isinstance(body, list):
+            return body
+        # Fallback to legacy v0
         status, body = _request(
             f"{self.base_url}/api/conversations/{conversation_id}/events",
             headers=self.headers, timeout=120)
-        if status >= 400:
-            return []
-        return body if isinstance(body, list) else body.get("events", [])
+        if isinstance(body, dict):
+            return body.get("events", [])
+        return []
+
+    def get_sandbox(self, conversation_id: str) -> str | None:
+        """Retrieve the sandbox container ID for the given conversation."""
+        status, body = _request(
+            f"{self.base_url}/api/v1/app-conversations?ids={conversation_id}",
+            headers=self.headers, timeout=60,
+        )
+        if status < 400 and isinstance(body, list) and body and body[0]:
+            return body[0].get("sandbox_id")
+        return None
+
+    def activate_profile(self, profile_name: str) -> bool:
+        """Globally activate a named LLM profile (e.g. 'Ollama-1.5b' or 'Ollama-14b') without restarting."""
+        status, _ = _request(
+            f"{self.base_url}/api/v1/settings/profiles/{profile_name}/activate",
+            method="POST", headers=self.headers, timeout=15,
+        )
+        return status < 400
+
+    def switch_conversation_profile(self, conversation_id: str, profile_name: str) -> bool:
+        """Switch an active conversation's LLM to a saved profile on the fly."""
+        status, _ = _request(
+            f"{self.base_url}/api/v1/app-conversations/{conversation_id}/switch_profile",
+            method="POST", headers=self.headers, body={"profile_name": profile_name}, timeout=15,
+        )
+        return status < 400
+

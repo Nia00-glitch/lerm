@@ -1,0 +1,79 @@
+causal_verdict: CORRELATIONAL
+conditions:
+- loop_retry
+- loop_verify
+confounds_checked:
+- equal_compute_wallclock
+- equal_tokens
+- equal_attempts
+- equal_cost
+- same_model_version
+- no_model_drift_within_experiment
+- comparable_task_order
+- same_seed_policy
+- same_task_set
+- no_human_intervention
+cost:
+  gpu_hours: 0.0
+  usd: 0.0
+  wallclock: 1.051
+created_utc: '2026-09-21T08:16:34.679574+00:00'
+effect_size:
+  ci_high: 0.0
+  ci_low: 0.0
+  is_placeholder: false
+  value: 0.0
+false_accept_rate: .nan
+false_reject_rate: 0.0
+human_signoff: false
+hypothesis: In-loop verification and repair (loop_verify) yields a higher pass^5 verified
+  success rate than compute-matched naive retry (loop_retry) under matched token,
+  turn, and wallclock budgets on held-out code repair tasks.
+hypothesis_key: 265d58277664cfc2
+id: FINDING-EXP-LOOP-002
+k_reruns: 5
+models:
+- openrouter/thinkingmachines/inkling-small:free
+n_runs: 80
+next_questions:
+- Does increasing task diversity via SWE-smith narrow the bootstrap CI on holdout
+  sets?
+preregistration: preregistrations/EXP-LOOP-002.yaml
+primary_metric: verified_success_pass_k
+replications: []
+scope_limits: 'Evaluated on 4 held-out software repair tasks under 3-turn and 120s
+  wallclock budget ceiling with pinned inkling-small:free. Note: n_tasks=4 keeps bootstrap
+  CI wide regardless of reruns; this experiment is a pilot for pipeline validity,
+  not yet powered for a general causal claim. Additionally, fixture-reset was verified
+  via a separate mechanism-level test (test_y1_fixture_reset.py), not a per-trial
+  forensic audit of this run''s own 79 trials, since fixture_hash logging was added
+  after this run completed.'
+skeptic_attempts:
+- attack: 1_replication_new_seeds
+  detail: no execution plane wired; cannot re-run with fresh seeds
+  status: NEEDS_EXECUTION
+- attack: 2_confound_search
+  detail: 'confounded, so the effect has a non-hypothesis explanation: equal_compute_wallclock
+    (mean 50.23 vs 45.49 (rel diff 9.44%, tol 5%)), equal_tokens (mean 781.6 vs 736.9
+    (rel diff 5.72%, tol 5%)), same_seed_policy (10 distinct seeds control / 10 treatment;
+    multisets DIFFER)'
+  status: KILLED
+- attack: 3_shortcut_hunt
+  detail: no shortcut pattern in 79 runs
+  status: SURVIVED
+- attack: 4_alternative_explanation
+  detail: no execution plane wired; alternative explanation not testable yet
+  status: NEEDS_EXECUTION
+- attack: 5_noise_check
+  detail: 'CI includes zero at n_tasks=4: +0.000 [+0.000, +0.000]'
+  status: KILLED
+status: REFUTED
+tasks:
+  private_holdout_n: 0
+  public:
+  - HOLDOUT-001
+  - HOLDOUT-002
+  - HOLDOUT-003
+  - HOLDOUT-004
+unexplained: Degree to which prompt token exhaustion impacts repair effectiveness
+  in small models under fixed wallclock caps.

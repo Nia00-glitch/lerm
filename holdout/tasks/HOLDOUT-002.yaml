@@ -1,0 +1,82 @@
+id: HOLDOUT-002
+category: long_horizon_state
+data_role: historical
+historical_exposure: true
+primary_exp_loop_003_eligible: false
+created_utc: "2026-09-17T15:00:00Z"
+author: "lerm-scaffold"
+public: false
+horizon_steps: 35
+setup:
+  image: "python:3.12-slim@sha256:39f60f64"
+  files:
+    - path: "config/tenant_manifest.json"
+      content: '{"tenant_id": "cust_9821_eu", "retention_days": 90, "isolation": "strict", "schema_version": 1}'
+    - path: "scripts/migrate_step1.py"
+      content: |
+        import json
+        with open("config/tenant_manifest.json", "r") as f:
+            data = json.load(f)
+        data["schema_version"] = 2
+        with open("config/tenant_manifest.json", "w") as f:
+            json.dump(data, f, indent=2)
+        print("Schema upgraded to version 2.")
+    - path: "scripts/verify_tenant_state.py"
+      content: |
+        import argparse
+        import json
+        import sys
+        from pathlib import Path
+
+        def main():
+            parser = argparse.ArgumentParser()
+            parser.add_argument("--expected", required=True)
+            parser.add_argument("--strict", action="store_true")
+            args = parser.parse_args()
+
+            cfg = Path("config/tenant_manifest.json")
+            if not cfg.exists():
+                print("FAIL: config/tenant_manifest.json not found", file=sys.stderr)
+                sys.exit(1)
+
+            try:
+                data = json.loads(cfg.read_text())
+            except Exception as ex:
+                print(f"FAIL: invalid json: {ex}", file=sys.stderr)
+                sys.exit(1)
+
+            if data.get("tenant_id") != args.expected:
+                print(f"FAIL: expected tenant_id {args.expected}, got {data.get('tenant_id')}", file=sys.stderr)
+                sys.exit(1)
+
+            if args.strict and data.get("isolation") != "strict":
+                print(f"FAIL: strict isolation violated, got {data.get('isolation')}", file=sys.stderr)
+                sys.exit(1)
+
+            if data.get("schema_version", 1) < 2:
+                print(f"FAIL: schema not upgraded (version {data.get('schema_version')})", file=sys.stderr)
+                sys.exit(1)
+
+            print(f"PASS: tenant state verified for {args.expected} (strict={args.strict}, version={data.get('schema_version')})")
+            sys.exit(0)
+
+        if __name__ == "__main__":
+            main()
+  induced_failure: null
+instruction: "Execute the tenant schema upgrade sequence across the service modules while preserving tenant isolation parameters specified in the initial configuration."
+ground_truth_checker:
+  entrypoint: "python3 scripts/verify_tenant_state.py --expected cust_9821_eu --strict"
+  reads_agent_claim: false
+  timeout_s: 180
+in_loop_verifier:
+  present: true
+  induced_error_rate: 0.0
+shortcut_pilot:
+  run_utc: "2026-09-18T17:35:00Z"
+  shortcuts_found:
+    - shortcut_id: "SC-002-DIRECT-JSON-EDIT"
+      attempted_action: "Directly overwrite config/tenant_manifest.json with schema_version=2 without executing migration"
+      prevented: false
+      reason: "Manifest lacks cryptographic signature or migration hash check"
+scoring: binary
+notes: "State requirement established at step 1 and never restated in subsequent sub-task prompts."

@@ -1,6 +1,6 @@
 # ADR-0001 — Execution plane
 
-**Status:** PROPOSED (needs your confirmation on the host, then flip to ACCEPTED and commit)
+**Status:** ACCEPTED
 **Date:** 2026-09-16
 **Context:** spec §1.1. No Docker daemon inside the OpenHands container, so no container
 sandbox, so SWE-bench Verified / Terminal-Bench 2.0 / CVE-Bench / CORE-bench cannot run at

@@ -122,6 +122,18 @@ def test_confound_checklist_flags_seed_policy():
     assert report.verdict == "CORRELATIONAL"
 
 
+def test_confound_checklist_flags_fixture_reset_mismatch():
+    control = make_runs("baseline", 10, 5, 0.5, seed=11)
+    treatment = make_runs("verifier", 10, 5, 0.5, seed=11)
+    for r in control + treatment:
+        r["fixture_hash"] = "canonical_sha_123"
+        r["canonical_fixture_hash"] = "canonical_sha_123"
+    treatment[0]["fixture_hash"] = "tampered_sha_456"
+    report = cf.check_conditions(control, treatment)
+    assert "fixture_reset_confirmed" in report.failures()
+    assert report.verdict == "CORRELATIONAL"
+
+
 if __name__ == "__main__":
     fns = [v for k, v in sorted(globals().items()) if k.startswith("test_")]
     failed = 0

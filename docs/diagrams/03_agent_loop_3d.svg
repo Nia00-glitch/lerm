@@ -1,0 +1,121 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 680" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#090d16" />
+      <stop offset="50%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#070a12" />
+    </linearGradient>
+
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+
+    <linearGradient id="retryGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#f59e0b" />
+      <stop offset="100%" stop-color="#ef4444" />
+    </linearGradient>
+
+    <linearGradient id="verifyGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#06b6d4" />
+      <stop offset="100%" stop-color="#8b5cf6" />
+    </linearGradient>
+
+    <filter id="shadow3" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="6" flood-color="#000000" flood-opacity="0.5" />
+    </filter>
+  </defs>
+
+  <rect width="1000" height="680" fill="url(#bgGrad3)" rx="16" />
+
+  <!-- Title -->
+  <text x="50" y="50" fill="#f8fafc" font-size="22" font-family="-apple-system, sans-serif" font-weight="700">LERM — MAIN AGENT &amp; RESEARCH LOOP</text>
+  <text x="50" y="75" fill="#94a3b8" font-size="13" font-family="-apple-system, sans-serif">Matched-Budget Causal Comparison: loop_retry (Arm A) vs loop_verify (Arm B)</text>
+
+  <!-- BUDGET MATCHING BAR (TOP) -->
+  <g transform="translate(50, 100)" filter="url(#shadow3)">
+    <rect width="900" height="50" rx="8" fill="#1e293b" stroke="#475569" stroke-width="1.2" />
+    <text x="20" y="30" fill="#38bdf8" font-size="12" font-family="monospace" font-weight="700">STRICT CAUSAL MATCHING INVARIANTS:</text>
+    <text x="310" y="30" fill="#f1f5f9" font-size="12" font-family="-apple-system, sans-serif">Max Turns = 3</text>
+    <circle cx="420" cy="26" r="3" fill="#64748b" />
+    <text x="440" y="30" fill="#f1f5f9" font-size="12" font-family="-apple-system, sans-serif">Token Ceiling = 16,000</text>
+    <circle cx="610" cy="26" r="3" fill="#64748b" />
+    <text x="630" y="30" fill="#f1f5f9" font-size="12" font-family="-apple-system, sans-serif">Wallclock Timeout = 120.0s</text>
+    <circle cx="820" cy="26" r="3" fill="#64748b" />
+    <text x="835" y="30" fill="#10b981" font-size="12" font-family="monospace">BALANCED</text>
+  </g>
+
+  <!-- COMMON TURN 1 BLOCK -->
+  <g transform="translate(360, 180)" filter="url(#shadow3)">
+    <rect width="280" height="85" rx="8" fill="url(#cardGrad)" stroke="#38bdf8" stroke-width="1.5" />
+    <text x="16" y="26" fill="#38bdf8" font-size="11" font-family="monospace" font-weight="700">TURN 1 (IDENTICAL INITIALIZATION)</text>
+    <text x="16" y="48" fill="#f8fafc" font-size="14" font-family="-apple-system, sans-serif" font-weight="700">Agent First-Attempt Generation</text>
+    <text x="16" y="68" fill="#94a3b8" font-size="11" font-family="-apple-system, sans-serif">Prompt + Broken Task Fixture -> Generates Code</text>
+  </g>
+
+  <!-- Split Fork Arrows from Turn 1 -->
+  <path d="M 430 265 L 260 330" stroke="#f59e0b" stroke-width="2" stroke-dasharray="3,3" />
+  <polygon points="256,325 258,335 266,330" fill="#f59e0b" />
+
+  <path d="M 570 265 L 740 330" stroke="#8b5cf6" stroke-width="2" stroke-dasharray="3,3" />
+  <polygon points="734,330 742,335 744,325" fill="#8b5cf6" />
+
+  <!-- LEFT COLUMN: ARM A - LOOP RETRY (CONTROL) -->
+  <g transform="translate(70, 335)" filter="url(#shadow3)">
+    <rect width="380" height="230" rx="10" fill="url(#cardGrad)" stroke="#f59e0b" stroke-width="1.8" />
+    <rect x="0" y="0" width="380" height="8" rx="4" fill="url(#retryGrad)" />
+    
+    <text x="20" y="32" fill="#f59e0b" font-size="12" font-family="monospace" font-weight="700">ARM A: loop_retry (CONTROL)</text>
+    <text x="20" y="56" fill="#f1f5f9" font-size="16" font-family="-apple-system, sans-serif" font-weight="700">Naive Independent Retry Loop</text>
+    
+    <g transform="translate(20, 75)">
+      <rect width="340" height="42" rx="5" fill="#0f172a" stroke="#334155" />
+      <text x="12" y="18" fill="#e2e8f0" font-size="11" font-family="-apple-system, sans-serif" font-weight="600">Turn 2: Blind Regeneration</text>
+      <text x="12" y="33" fill="#94a3b8" font-size="10" font-family="monospace">Discards Turn 1 state; retries without test diagnostics</text>
+    </g>
+
+    <g transform="translate(20, 128)">
+      <rect width="340" height="42" rx="5" fill="#0f172a" stroke="#334155" />
+      <text x="12" y="18" fill="#e2e8f0" font-size="11" font-family="-apple-system, sans-serif" font-weight="600">Turn 3: Final Blind Attempt</text>
+      <text x="12" y="33" fill="#94a3b8" font-size="10" font-family="monospace">Repeats retry if budget remains; halts on Turn 3</text>
+    </g>
+
+    <text x="20" y="195" fill="#cbd5e1" font-size="11" font-family="-apple-system, sans-serif">• Confound Control: Equal token consumption cap</text>
+    <text x="20" y="212" fill="#ef4444" font-size="11" font-family="-apple-system, sans-serif">• Flaw in naive loops: Burns compute without feedback</text>
+  </g>
+
+  <!-- RIGHT COLUMN: ARM B - LOOP VERIFY (TREATMENT) -->
+  <g transform="translate(550, 335)" filter="url(#shadow3)">
+    <rect width="380" height="230" rx="10" fill="url(#cardGrad)" stroke="#8b5cf6" stroke-width="1.8" />
+    <rect x="0" y="0" width="380" height="8" rx="4" fill="url(#verifyGrad)" />
+    
+    <text x="20" y="32" fill="#a855f7" font-size="12" font-family="monospace" font-weight="700">ARM B: loop_verify (TREATMENT)</text>
+    <text x="20" y="56" fill="#f1f5f9" font-size="16" font-family="-apple-system, sans-serif" font-weight="700">In-Loop Diagnostic &amp; Iterative Repair</text>
+
+    <g transform="translate(20, 75)">
+      <rect width="340" height="42" rx="5" fill="#0f172a" stroke="#334155" />
+      <text x="12" y="18" fill="#e2e8f0" font-size="11" font-family="-apple-system, sans-serif" font-weight="600">In-Loop Verifier Interception</text>
+      <text x="12" y="33" fill="#a855f7" font-size="10" font-family="monospace">Executes targeted tests; captures stack traces &amp; AST diff</text>
+    </g>
+
+    <g transform="translate(20, 128)">
+      <rect width="340" height="42" rx="5" fill="#0f172a" stroke="#334155" />
+      <text x="12" y="18" fill="#e2e8f0" font-size="11" font-family="-apple-system, sans-serif" font-weight="600">Turn 2/3: Targeted Repair Prompt</text>
+      <text x="12" y="33" fill="#06b6d4" font-size="10" font-family="monospace">Agent receives failure context to generate precise patch</text>
+    </g>
+
+    <text x="20" y="195" fill="#cbd5e1" font-size="11" font-family="-apple-system, sans-serif">• Question: Does verifier guidance beat naive retry?</text>
+    <text x="20" y="212" fill="#a855f7" font-size="11" font-family="-apple-system, sans-serif">• Metric: Pass^5 verified consensus under matched cost</text>
+  </g>
+
+  <!-- Convergence to Evaluator -->
+  <path d="M 260 565 L 260 605 L 450 605" stroke="#f59e0b" stroke-width="2" fill="none" />
+  <path d="M 740 565 L 740 605 L 550 605" stroke="#8b5cf6" stroke-width="2" fill="none" />
+  <polygon points="495,600 505,605 495,610" fill="#38bdf8" />
+
+  <!-- BOTTOM HARNESS -->
+  <g transform="translate(380, 585)" filter="url(#shadow3)">
+    <rect width="240" height="40" rx="6" fill="#0f172a" stroke="#38bdf8" stroke-width="1.5" />
+    <text x="20" y="24" fill="#38bdf8" font-size="11" font-family="monospace" font-weight="700">INDEPENDENT GROUND TRUTH</text>
+  </g>
+</svg>

@@ -79,6 +79,7 @@ class Effect:
     n_tasks: int
     k: int
     method: str
+    is_placeholder: bool = False
 
     def crosses_zero(self) -> bool:
         return self.ci_low <= 0.0 <= self.ci_high
@@ -225,3 +226,75 @@ def verifier_quality(verifier_said: Sequence[bool], ground_truth: Sequence[bool]
     far = float((v & ~g).sum() / neg) if neg else float("nan")
     frr = float((~v & g).sum() / pos) if pos else float("nan")
     return VerifierQuality(false_accept_rate=far, false_reject_rate=frr, n=int(v.size))
+
+
+# --------------------------------------------------------------------------
+# Single-proportion calibration statistics — Gate R4
+# --------------------------------------------------------------------------
+
+def wilson_score_interval(successes: int, n: int, alpha: float = 0.05) -> tuple[float, float]:
+    """Wilson score confidence interval for a single binomial proportion.
+
+    Preferred over Wald (which severely under-covers near boundaries) and
+    Clopper-Pearson (which is unnecessarily conservative for sizing calibration).
+    """
+    if n <= 0:
+        raise ValueError(f"n must be positive, got {n}")
+    if not (0 <= successes <= n):
+        raise ValueError(f"successes must be in [0, n], got {successes} out of {n}")
+    p_hat = successes / n
+    z = float(sps.norm.ppf(1 - alpha / 2))
+    denom = 1.0 + (z ** 2) / n
+    center = (p_hat + (z ** 2) / (2 * n)) / denom
+    half_width = (z * math.sqrt((p_hat * (1 - p_hat) / n) + ((z ** 2) / (4 * (n ** 2))))) / denom
+    return (max(0.0, float(center - half_width)), min(1.0, float(center + half_width)))
+
+
+def clopper_pearson_interval(successes: int, n: int, alpha: float = 0.05) -> tuple[float, float]:
+    """Exact Clopper-Pearson confidence interval based on Beta quantiles."""
+    if n <= 0:
+        raise ValueError(f"n must be positive, got {n}")
+    if not (0 <= successes <= n):
+        raise ValueError(f"successes must be in [0, n], got {successes} out of {n}")
+    lower = 0.0 if successes == 0 else float(sps.beta.ppf(alpha / 2, successes, n - successes + 1))
+    upper = 1.0 if successes == n else float(sps.beta.ppf(1 - alpha / 2, successes + 1, n - successes))
+    return (lower, upper)
+
+
+def calibration_sample_size(
+    target_margin: float = 0.15,
+    alpha: float = 0.05,
+    p_assumed: float = 0.50,
+) -> int:
+    """Minimum sample size N to achieve target confidence margin E at confidence 1-alpha."""
+    if target_margin <= 0:
+        raise ValueError("target_margin must be > 0")
+    z = float(sps.norm.ppf(1 - alpha / 2))
+    n = math.ceil((z ** 2 * p_assumed * (1 - p_assumed)) / (target_margin ** 2))
+    return int(n)
+
+
+def evaluate_calibration_admission(
+    successes: int,
+    n: int,
+    target_low: float = 0.30,
+    target_high: float = 0.70,
+    alpha: float = 0.05,
+) -> tuple[str, tuple[float, float]]:
+    """Evaluates task admission using Wilson 95% score interval against [target_low, target_high].
+
+    Returns: (decision, (ci_low, ci_high))
+      - 'ADMIT': Point estimate in [target_low, target_high] and CI substantially overlaps target region
+      - 'REJECT_TOO_EASY': Point estimate > target_high and lower CI >= 0.50
+      - 'REJECT_TOO_HARD': Point estimate < target_low and upper CI <= 0.50
+    """
+    ci_low, ci_high = wilson_score_interval(successes, n, alpha=alpha)
+    p_hat = successes / n
+    if p_hat > target_high and ci_low >= 0.50:
+        return "REJECT_TOO_EASY", (ci_low, ci_high)
+    if p_hat < target_low and ci_high <= 0.50:
+        return "REJECT_TOO_HARD", (ci_low, ci_high)
+    if target_low <= p_hat <= target_high:
+        return "ADMIT", (ci_low, ci_high)
+    return "UNCERTAIN", (ci_low, ci_high)
+

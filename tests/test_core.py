@@ -11,6 +11,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from lerm import kb, stats as st, trace
 from lerm.prereg import Preregistration, PreregViolation, assert_declared, verify
+from lerm.regression import check_regression
 
 
 # ------------------------------------------------------------------ stats
@@ -111,8 +112,19 @@ def test_prereg_rejects_k_below_five():
         Preregistration(id="X", hypothesis="h", conditions=["A", "B"],
                         primary_metric="m", k_reruns=1)
     except ValueError:
+        pass
+    else:
+        raise AssertionError("k_reruns < 5 was accepted")
+
+
+def test_prereg_rejects_n_reruns_below_two_k():
+    try:
+        Preregistration(id="X", hypothesis="h", conditions=["A", "B"],
+                        primary_metric="m", k_reruns=5, n_reruns=5)
+    except ValueError as e:
+        assert "n_reruns" in str(e)
         return
-    raise AssertionError("k_reruns < 5 was accepted")
+    raise AssertionError("n_reruns < 2*k_reruns was accepted")
 
 
 # ------------------------------------------------------------------- trace
@@ -154,9 +166,27 @@ def _finding(**kw):
         cost={"usd": 1.0, "gpu_hours": 0, "wallclock": 1.0},
         confounds_checked=["equal_tokens"], skeptic_attempts=[], status="SUPPORTED",
         scope_limits="holds on holdout only", unexplained="residual variance by task family",
+        causal_verdict="CAUSAL_ELIGIBLE",
     )
     base.update(kw)
     return kb.Finding(**base)
+
+
+def test_supported_requires_causal_eligible():
+    try:
+        _finding(status="SUPPORTED", causal_verdict="CORRELATIONAL")
+    except kb.SchemaViolation:
+        pass
+    else:
+        raise AssertionError("SUPPORTED finding was accepted despite failed confounds (CORRELATIONAL)")
+
+
+def test_placeholder_effect_blocks_supported_finding():
+    try:
+        _finding(status="SUPPORTED", effect_size={"value": 0.5, "ci_low": 0.2, "ci_high": 0.8, "is_placeholder": True})
+    except kb.SchemaViolation:
+        return
+    raise AssertionError("Finding with is_placeholder=True was allowed to be created")
 
 
 def test_unexplained_is_mandatory():
@@ -193,6 +223,120 @@ def test_settled_hypothesis_blocks_rerun():
         assert kb.already_settled("a completely different question", tmp) is None
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
+
+
+# -------------------------------------------------------------- regression
+
+def test_regression_detection():
+    b_tasks = {"T1": [True, True], "T2": [False, False]}
+    t_tasks = {"T1": [False, False], "T2": [True, True], "T3": [True, True]}
+    report = check_regression(b_tasks, t_tasks)
+    assert report.has_regression is True
+    assert len(report.regressed_tasks) == 1
+    assert report.regressed_tasks[0].task_id == "T1"
+    assert report.verdict == "IMPROVED_WITH_REGRESSION"
+    assert abs(report.net_improvement - (2/3 - 1/2)) < 1e-6
+
+
+def test_regression_clean_improvement():
+    b_tasks = {"T1": [True, True], "T2": [False, False]}
+    t_tasks = {"T1": [True, True], "T2": [True, True]}
+    report = check_regression(b_tasks, t_tasks)
+    assert report.has_regression is False
+    assert len(report.regressed_tasks) == 0
+    assert report.verdict == "CLEAN_IMPROVEMENT"
+    assert report.net_improvement == 0.5
+
+
+def test_regression_empty_inputs():
+    report = check_regression({}, {})
+    assert report.verdict == "NO_MEANINGFUL_CHANGE"
+    assert report.has_regression is False
+
+
+# -------------------------------------------------------------- controller
+
+def test_controller_control_halts_after_one_attempt():
+    from lerm.controller import DeterministicLoopController, LoopCondition, LoopStep
+    ctrl = DeterministicLoopController(LoopCondition.CONTROL)
+    assert ctrl.decide_next_step(None) == "initial_attempt"
+    step1 = LoopStep(0, "initial_attempt", "m", in_loop_passed=False)
+    ctrl.record_step(step1)
+    assert ctrl.decide_next_step(step1) == "halt"
+
+
+def test_controller_retry_restarts_on_failure():
+    from lerm.controller import DeterministicLoopController, LoopCondition, LoopStep
+    ctrl = DeterministicLoopController(LoopCondition.RETRY)
+    step1 = LoopStep(0, "initial_attempt", "m", in_loop_passed=False)
+    ctrl.record_step(step1)
+    assert ctrl.decide_next_step(step1) == "retry"
+
+
+def test_controller_verify_repairs_on_failure():
+    from lerm.controller import DeterministicLoopController, LoopCondition, LoopStep
+    ctrl = DeterministicLoopController(LoopCondition.VERIFY)
+    step1 = LoopStep(0, "initial_attempt", "m", in_loop_passed=False)
+    ctrl.record_step(step1)
+    assert ctrl.decide_next_step(step1) == "repair"
+    # Success halts
+    step2 = LoopStep(1, "repair", "m", in_loop_passed=True)
+    ctrl.record_step(step2)
+    assert ctrl.decide_next_step(step2) == "halt"
+
+
+def test_controller_enforces_token_and_turn_budget():
+    from lerm.controller import DeterministicLoopController, LoopCondition, LoopStep, EpisodeBudget
+    budget = EpisodeBudget(max_tokens=1000, max_turns=2)
+    ctrl = DeterministicLoopController(LoopCondition.VERIFY, budget=budget)
+    step1 = LoopStep(0, "initial_attempt", "m", in_loop_passed=False, tokens_consumed=1200)
+    ctrl.record_step(step1)
+    assert ctrl.is_budget_exhausted() is True
+    assert ctrl.decide_next_step(step1) == "halt"
+
+
+def test_skeptic_rejects_placeholder_effect():
+    from lerm.skeptic import Skeptic, KILL
+    from lerm.stats import Effect
+    sk = Skeptic(skeptic_model="deepseek/deepseek-v3", model_under_test="ollama/qwen2.5-coder:1.5b")
+    placeholder_effect = Effect(value=0.5, ci_low=0.1, ci_high=0.9, n_tasks=1, k=5, method="placeholder", is_placeholder=True)
+    res = sk.attack_noise(placeholder_effect, threshold=0.05)
+    assert res.status == KILL
+    assert "placeholder" in res.detail
+
+
+def test_wilson_score_interval():
+    from lerm.stats import wilson_score_interval, clopper_pearson_interval
+    # At p_hat = 0.5 with n = 20
+    w_low, w_high = wilson_score_interval(10, 20, alpha=0.05)
+    assert 0.29 < w_low < 0.31
+    assert 0.69 < w_high < 0.71
+    
+    # Boundary p_hat = 0
+    w0_low, w0_high = wilson_score_interval(0, 20, alpha=0.05)
+    assert w0_low == 0.0
+    assert w0_high < 0.17
+
+    # Clopper-Pearson comparison
+    cp_low, cp_high = clopper_pearson_interval(10, 20, alpha=0.05)
+    assert cp_low < w_low  # Clopper-Pearson is strictly wider/more conservative
+    assert cp_high > w_high
+
+
+def test_calibration_sample_size():
+    from lerm.stats import calibration_sample_size, evaluate_calibration_admission
+    n = calibration_sample_size(target_margin=0.15, alpha=0.05, p_assumed=0.50)
+    assert n == 43
+    
+    # Admission tests at n=20
+    dec, _ = evaluate_calibration_admission(10, 20)  # 50%
+    assert dec == "ADMIT"
+    
+    dec_easy, _ = evaluate_calibration_admission(19, 20)  # 95%
+    assert dec_easy == "REJECT_TOO_EASY"
+
+    dec_hard, _ = evaluate_calibration_admission(2, 20)  # 10%
+    assert dec_hard == "REJECT_TOO_HARD"
 
 
 if __name__ == "__main__":

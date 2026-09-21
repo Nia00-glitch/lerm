@@ -110,7 +110,21 @@ def check_repo() -> None:
     add("no_secrets_tracked", OK if not leaked else FAIL, ", ".join(leaked) or "clean")
 
 
+def _load_env() -> None:
+    env_file = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), ".env")
+    if os.path.exists(env_file):
+        with open(env_file, "r", encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if line and not line.startswith("#") and "=" in line:
+                    k, v = line.split("=", 1)
+                    k, v = k.strip(), v.strip()
+                    if k and k not in os.environ and v:
+                        os.environ[k] = v
+
+
 def main() -> int:
+    _load_env()
     check_platform()
     check_docker()
     check_omniroute()

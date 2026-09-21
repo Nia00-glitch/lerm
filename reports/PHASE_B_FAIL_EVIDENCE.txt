@@ -1,0 +1,41 @@
+=== LERM EXP-LOOP-003 PHASE B ADVERSARIAL HISTORICAL FIREWALL AUDIT (FAILURE EVIDENCE) ===
+Timestamp: 2026-09-21T16:00:25+05:30
+
+Vulnerabilities Discovered:
+V1: Calibration Firewall Omission (target_role='calibration' silently admitted historical holdouts).
+V2: Trace Ingestion Ignores Task Identity (trace with task_id='HOLDOUT-001' and data_role='primary' accepted).
+V3: Lack of Immutable Task Registry (tampering both YAML flags to False/True admitted HOLDOUT-001).
+V4: Fail-Open Architecture on Missing or Non-Boolean Fields (omitted flags or string 'false' admitted).
+
+Raw Output of scripts/audit_phase_b.py:
+=================================================================
+=== PHASE B: ADVERSARIAL HISTORICAL FIREWALL AUDIT ===
+=================================================================
+
+--- B2: TESTING ALL FOUR HISTORICAL TASKS AGAINST PRIMARY ---
+[HOLDOUT-001] CAUGHT EXPECTED FirewallViolation: REJECTED: Task 'HOLDOUT-001' has historical_exposure=True. Historical tasks from EXP-LOOP-002 cannot enter EXP-LOOP-003 primary.
+[HOLDOUT-002] CAUGHT EXPECTED FirewallViolation: REJECTED: Task 'HOLDOUT-002' has historical_exposure=True. Historical tasks from EXP-LOOP-002 cannot enter EXP-LOOP-003 primary.
+[HOLDOUT-003] CAUGHT EXPECTED FirewallViolation: REJECTED: Task 'HOLDOUT-003' has historical_exposure=True. Historical tasks from EXP-LOOP-002 cannot enter EXP-LOOP-003 primary.
+[HOLDOUT-004] CAUGHT EXPECTED FirewallViolation: REJECTED: Task 'HOLDOUT-004' has historical_exposure=True. Historical tasks from EXP-LOOP-002 cannot enter EXP-LOOP-003 primary.
+
+--- B3: TESTING HISTORICAL TASKS AGAINST CALIBRATION ---
+[HOLDOUT-001] ADMITTED to calibration! (target_role=calibration)
+[HOLDOUT-002] ADMITTED to calibration! (target_role=calibration)
+[HOLDOUT-003] ADMITTED to calibration! (target_role=calibration)
+[HOLDOUT-004] ADMITTED to calibration! (target_role=calibration)
+
+--- B4: POSITIVE CONTROL (CLEAN FRESH CANDIDATE) ---
+[SWE-SM-001] ADMITTED to primary cleanly (Expected behavior)
+
+--- B5: METADATA TAMPERING ATTACKS (ON HOLDOUT-001) ---
+Attack 1 (historical_exposure=False): CAUGHT REJECTION -> REJECTED: Task 'HOLDOUT-001' is marked primary_exp_loop_003_eligible=False. Admission refused.
+Attack 2 (eligible=True): CAUGHT REJECTION -> REJECTED: Task 'HOLDOUT-001' has historical_exposure=True. Historical tasks from EXP-LOOP-002 cannot enter EXP-LOOP-003 primary.
+Attack 3 (Both flags tampered to look fresh, ID='HOLDOUT-001'): BREACHED / ADMITTED! (VULNERABILITY!)
+Attack 4 (Copied task with ID='FAKE-FRESH-001'): BREACHED / ADMITTED! (VULNERABILITY!)
+
+--- B6: TRACE INGESTION ATTACK ---
+B6 Trace Ingestion (HOLDOUT-001 with data_role='primary'): ACCEPTED! (VULNERABILITY: No task-level firewall at trace ingestion!)
+
+--- B10: FAIL-CLOSED AUDIT ---
+Q1/Q2 (Missing historical_exposure & primary_exp_loop_003_eligible): ADMITTED! (FAILS OPEN!)
+Q3 (String booleans 'false' / 'true'): ADMITTED! (FAILS OPEN!)

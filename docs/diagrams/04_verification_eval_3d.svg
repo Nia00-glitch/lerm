@@ -1,0 +1,155 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 680" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a0f1d" />
+      <stop offset="50%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#060911" />
+    </linearGradient>
+
+    <linearGradient id="chainBlockGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+
+    <filter id="shadow4" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="6" flood-color="#000000" flood-opacity="0.5" />
+    </filter>
+  </defs>
+
+  <rect width="1000" height="680" fill="url(#bgGrad4)" rx="16" />
+
+  <!-- Header -->
+  <text x="50" y="50" fill="#f8fafc" font-size="22" font-family="-apple-system, sans-serif" font-weight="700">LERM — VERIFICATION &amp; EVALUATION ARCHITECTURE</text>
+  <text x="50" y="75" fill="#94a3b8" font-size="13" font-family="-apple-system, sans-serif">8-Stage Deterministic Candidate Verification Chain &amp; Ephemeral Container Harness</text>
+
+  <!-- 4 STEP HORIZONTAL PIPELINE -->
+  <g transform="translate(50, 110)">
+    <!-- STEP 1: BASELINE CHECK -->
+    <g transform="translate(0, 0)" filter="url(#shadow4)">
+      <rect width="205" height="150" rx="8" fill="url(#chainBlockGrad)" stroke="#10b981" stroke-width="1.5" />
+      <rect x="0" y="0" width="205" height="6" rx="3" fill="#10b981" />
+      <text x="14" y="28" fill="#10b981" font-size="11" font-family="monospace" font-weight="700">STAGE A &amp; B: BASELINE</text>
+      <text x="14" y="50" fill="#f8fafc" font-size="14" font-family="-apple-system, sans-serif" font-weight="700">Clean Commit State</text>
+      <text x="14" y="72" fill="#94a3b8" font-size="11" font-family="-apple-system, sans-serif">• Pinned Git Commit SHA</text>
+      <text x="14" y="90" fill="#94a3b8" font-size="11" font-family="-apple-system, sans-serif">• Run Baseline Evaluator</text>
+      
+      <rect x="14" y="108" width="177" height="28" rx="4" fill="#064e3b" stroke="#10b981" stroke-width="1" />
+      <text x="24" y="126" fill="#a7f3d0" font-size="11" font-family="monospace" font-weight="700">EXPECTED: PASS (0)</text>
+    </g>
+
+    <!-- Arrow 1 -> 2 -->
+    <path d="M 205 75 L 240 75" stroke="#10b981" stroke-width="2.5" />
+    <polygon points="236,70 246,75 236,80" fill="#10b981" />
+
+    <!-- STEP 2: MUTATION INJECTION -->
+    <g transform="translate(245, 0)" filter="url(#shadow4)">
+      <rect width="205" height="150" rx="8" fill="url(#chainBlockGrad)" stroke="#ef4444" stroke-width="1.5" />
+      <rect x="0" y="0" width="205" height="6" rx="3" fill="#ef4444" />
+      <text x="14" y="28" fill="#ef4444" font-size="11" font-family="monospace" font-weight="700">STAGE C &amp; D: MUTATION</text>
+      <text x="14" y="50" fill="#f8fafc" font-size="14" font-family="-apple-system, sans-serif" font-weight="700">AST Bug Injection</text>
+      <text x="14" y="72" fill="#94a3b8" font-size="11" font-family="-apple-system, sans-serif">• Apply 1 Procedural Mod</text>
+      <text x="14" y="90" fill="#94a3b8" font-size="11" font-family="-apple-system, sans-serif">• Run Ground-Truth Tests</text>
+
+      <rect x="14" y="108" width="177" height="28" rx="4" fill="#7f1d1d" stroke="#ef4444" stroke-width="1" />
+      <text x="24" y="126" fill="#fecaca" font-size="11" font-family="monospace" font-weight="700">EXPECTED: FAIL (!=0)</text>
+    </g>
+
+    <!-- Arrow 2 -> 3 -->
+    <path d="M 450 75 L 485 75" stroke="#ef4444" stroke-width="2.5" />
+    <polygon points="481,70 491,75 481,80" fill="#ef4444" />
+
+    <!-- STEP 3: REFERENCE REPAIR -->
+    <g transform="translate(490, 0)" filter="url(#shadow4)">
+      <rect width="205" height="150" rx="8" fill="url(#chainBlockGrad)" stroke="#38bdf8" stroke-width="1.5" />
+      <rect x="0" y="0" width="205" height="6" rx="3" fill="#38bdf8" />
+      <text x="14" y="28" fill="#38bdf8" font-size="11" font-family="monospace" font-weight="700">STAGE E &amp; F: REPAIR</text>
+      <text x="14" y="50" fill="#f8fafc" font-size="14" font-family="-apple-system, sans-serif" font-weight="700">Inverse Patch Test</text>
+      <text x="14" y="72" fill="#94a3b8" font-size="11" font-family="-apple-system, sans-serif">• Apply Known-Good Fix</text>
+      <text x="14" y="90" fill="#94a3b8" font-size="11" font-family="-apple-system, sans-serif">• Run Ground-Truth Tests</text>
+
+      <rect x="14" y="108" width="177" height="28" rx="4" fill="#0c4a6e" stroke="#38bdf8" stroke-width="1" />
+      <text x="24" y="126" fill="#bae6fd" font-size="11" font-family="monospace" font-weight="700">EXPECTED: PASS (0)</text>
+    </g>
+
+    <!-- Arrow 3 -> 4 -->
+    <path d="M 695 75 L 730 75" stroke="#38bdf8" stroke-width="2.5" />
+    <polygon points="726,70 736,75 726,80" fill="#38bdf8" />
+
+    <!-- STEP 4: RESET HASH CHECK -->
+    <g transform="translate(735, 0)" filter="url(#shadow4)">
+      <rect width="175" height="150" rx="8" fill="url(#chainBlockGrad)" stroke="#a855f7" stroke-width="1.5" />
+      <rect x="0" y="0" width="175" height="6" rx="3" fill="#a855f7" />
+      <text x="14" y="28" fill="#a855f7" font-size="11" font-family="monospace" font-weight="700">STAGE G &amp; H: RESET</text>
+      <text x="14" y="50" fill="#f8fafc" font-size="14" font-family="-apple-system, sans-serif" font-weight="700">State Verification</text>
+      <text x="14" y="72" fill="#94a3b8" font-size="11" font-family="-apple-system, sans-serif">• Reset Mutated State</text>
+      <text x="14" y="90" fill="#94a3b8" font-size="11" font-family="-apple-system, sans-serif">• Compare SHA-256 Hash</text>
+
+      <rect x="14" y="108" width="147" height="28" rx="4" fill="#581c87" stroke="#a855f7" stroke-width="1" />
+      <text x="20" y="126" fill="#e9d5ff" font-size="10" font-family="monospace" font-weight="700">RESET == MUTATED</text>
+    </g>
+  </g>
+
+  <!-- LOWER SECTION: HARNESS INTEGRITY & REJECTION TAXONOMY -->
+  <g transform="translate(50, 300)">
+    <!-- CONTAINER ISOLATION BOX -->
+    <g transform="translate(0, 0)" filter="url(#shadow4)">
+      <rect width="430" height="310" rx="10" fill="url(#chainBlockGrad)" stroke="#475569" stroke-width="1.5" />
+      <text x="20" y="32" fill="#38bdf8" font-size="12" font-family="monospace" font-weight="700">EXECUTION PLANE ISOLATION (CONTAINER SANDBOX)</text>
+      <text x="20" y="56" fill="#f1f5f9" font-size="16" font-family="-apple-system, sans-serif" font-weight="700">Docker Ephemeral Evaluation Fabric</text>
+
+      <g transform="translate(20, 80)">
+        <circle cx="10" cy="10" r="4" fill="#38bdf8" />
+        <text x="24" y="14" fill="#cbd5e1" font-size="12" font-family="-apple-system, sans-serif">Read-Only Test Mounts: Agent cannot overwrite evaluators</text>
+      </g>
+      <g transform="translate(20, 120)">
+        <circle cx="10" cy="10" r="4" fill="#38bdf8" />
+        <text x="24" y="14" fill="#cbd5e1" font-size="12" font-family="-apple-system, sans-serif">Offline Network Isolation: Zero external telemetry or leakage</text>
+      </g>
+      <g transform="translate(20, 160)">
+        <circle cx="10" cy="10" r="4" fill="#38bdf8" />
+        <text x="24" y="14" fill="#cbd5e1" font-size="12" font-family="-apple-system, sans-serif">Fresh Ephemeral Mount: Clean checkout per trial</text>
+      </g>
+      <g transform="translate(20, 200)">
+        <circle cx="10" cy="10" r="4" fill="#38bdf8" />
+        <text x="24" y="14" fill="#cbd5e1" font-size="12" font-family="-apple-system, sans-serif">Deterministic Wallclock Limits: Hard 120.0s kill timer</text>
+      </g>
+      <g transform="translate(20, 240)">
+        <circle cx="10" cy="10" r="4" fill="#38bdf8" />
+        <text x="24" y="14" fill="#cbd5e1" font-size="12" font-family="-apple-system, sans-serif">Local Resource Management: Ollama RAM eviction on 16GB host</text>
+      </g>
+    </g>
+
+    <!-- REJECTION TAXONOMY BOX -->
+    <g transform="translate(470, 0)" filter="url(#shadow4)">
+      <rect width="440" height="310" rx="10" fill="url(#chainBlockGrad)" stroke="#f43f5e" stroke-width="1.5" />
+      <text x="20" y="32" fill="#f43f5e" font-size="12" font-family="monospace" font-weight="700">DETERMINISTIC REJECTION TAXONOMY</text>
+      <text x="20" y="56" fill="#f1f5f9" font-size="16" font-family="-apple-system, sans-serif" font-weight="700">Fail-Closed Candidate Filtration</text>
+
+      <g transform="translate(20, 75)">
+        <rect width="400" height="32" rx="4" fill="#1e293b" />
+        <text x="10" y="21" fill="#f87171" font-size="11" font-family="monospace">baseline_failure</text>
+        <text x="180" y="21" fill="#94a3b8" font-size="11" font-family="-apple-system, sans-serif">Clean repo fails initial unit tests</text>
+      </g>
+      <g transform="translate(20, 115)">
+        <rect width="400" height="32" rx="4" fill="#1e293b" />
+        <text x="10" y="21" fill="#f87171" font-size="11" font-family="monospace">mutation_no_effect</text>
+        <text x="180" y="21" fill="#94a3b8" font-size="11" font-family="-apple-system, sans-serif">Mutation fails to break tests</text>
+      </g>
+      <g transform="translate(20, 155)">
+        <rect width="400" height="32" rx="4" fill="#1e293b" />
+        <text x="10" y="21" fill="#f87171" font-size="11" font-family="monospace">infrastructure_failure</text>
+        <text x="180" y="21" fill="#94a3b8" font-size="11" font-family="-apple-system, sans-serif">OOM, timeout, Docker failure</text>
+      </g>
+      <g transform="translate(20, 195)">
+        <rect width="400" height="32" rx="4" fill="#1e293b" />
+        <text x="10" y="21" fill="#f87171" font-size="11" font-family="monospace">reference_repair_fail</text>
+        <text x="180" y="21" fill="#94a3b8" font-size="11" font-family="-apple-system, sans-serif">Task unrepairable by known fix</text>
+      </g>
+      <g transform="translate(20, 235)">
+        <rect width="400" height="32" rx="4" fill="#1e293b" />
+        <text x="10" y="21" fill="#f87171" font-size="11" font-family="monospace">historical_firewall</text>
+        <text x="180" y="21" fill="#94a3b8" font-size="11" font-family="-apple-system, sans-serif">EXP-LOOP-002 Holdout Match</text>
+      </g>
+    </g>
+  </g>
+</svg>

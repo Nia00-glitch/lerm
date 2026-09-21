@@ -1,5 +1,8 @@
 id: HOLDOUT-000                 # stable, never reused
 category: recovery_after_failure | long_horizon_state | tool_misuse_trap | unreliable_verifier
+data_role: historical | calibration | primary | diagnostic
+historical_exposure: false         # true if exposed to EXP-LOOP-002 or prior runs
+primary_exp_loop_003_eligible: true # must be false if historical_exposure is true
 created_utc: ""
 author: ""
 public: false                   # must stay false; gates reporting

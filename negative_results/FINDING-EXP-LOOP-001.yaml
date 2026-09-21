@@ -1,0 +1,71 @@
+causal_verdict: CORRELATIONAL
+conditions:
+- loop_retry
+- loop_verify
+confounds_checked:
+- equal_compute_wallclock
+- equal_tokens
+- equal_attempts
+- equal_cost
+- same_model_version
+- no_model_drift_within_experiment
+- comparable_task_order
+- same_seed_policy
+- same_task_set
+- no_human_intervention
+cost:
+  gpu_hours: 0.0
+  usd: 0.0
+  wallclock: 0.64
+created_utc: '2026-09-20T17:52:54.067075+00:00'
+effect_size:
+  ci_high: 0.75
+  ci_low: 0.0
+  value: 0.25
+false_accept_rate: .nan
+false_reject_rate: 0.0
+human_signoff: false
+hypothesis: In-loop verification and repair (loop_verify) yields a higher pass^5 verified
+  success rate than compute-matched naive retry (loop_retry) under matched token and
+  turn budgets on held-out code repair tasks.
+hypothesis_key: 91569e66c4497bd7
+id: FINDING-EXP-LOOP-001
+k_reruns: 5
+models:
+- openrouter/thinkingmachines/inkling-small:free
+n_runs: 40
+next_questions:
+- Does increasing the model scale to 14B reverse failure modes on HOLDOUT-004?
+preregistration: preregistrations/EXP-LOOP-001.yaml
+primary_metric: verified_success_pass_k
+replications: []
+scope_limits: Restricted to local 1.5B coder model on 4 held-out software repair tasks
+  under 3-turn budget ceiling.
+skeptic_attempts:
+- attack: 1_replication_new_seeds
+  detail: no execution plane wired; cannot re-run with fresh seeds
+  status: NEEDS_EXECUTION
+- attack: 2_confound_search
+  detail: 'confounded, so the effect has a non-hypothesis explanation: equal_compute_wallclock
+    (mean 68.99 vs 46.23 (rel diff 33.00%, tol 5%)), equal_tokens (mean 876.6 vs 797.3
+    (rel diff 9.05%, tol 5%))'
+  status: KILLED
+- attack: 3_shortcut_hunt
+  detail: no shortcut pattern in 40 runs
+  status: SURVIVED
+- attack: 4_alternative_explanation
+  detail: no execution plane wired; alternative explanation not testable yet
+  status: NEEDS_EXECUTION
+- attack: 5_noise_check
+  detail: 'CI includes zero at n_tasks=4: +0.250 [+0.000, +0.750]'
+  status: KILLED
+status: REFUTED
+tasks:
+  private_holdout_n: 0
+  public:
+  - HOLDOUT-001
+  - HOLDOUT-002
+  - HOLDOUT-003
+  - HOLDOUT-004
+unexplained: Degree to which prompt token exhaustion impacts repair effectiveness
+  in small local models.

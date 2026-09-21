@@ -81,8 +81,15 @@ class Finding:
         for key in ("value", "ci_low", "ci_high"):
             if key not in self.effect_size:
                 raise SchemaViolation(f"{self.id}: effect_size missing {key!r}")
+        if self.effect_size.get("is_placeholder"):
+            raise SchemaViolation(f"{self.id}: cannot create Finding from placeholder effect size (n < k)")
         if self.k_reruns < 5:
             raise SchemaViolation(f"{self.id}: k_reruns must be >=5")
+        if self.status == "SUPPORTED" and self.causal_verdict != "CAUSAL_ELIGIBLE":
+            raise SchemaViolation(
+                f"{self.id}: cannot set status to 'SUPPORTED' when causal_verdict is {self.causal_verdict!r}. "
+                "Confound checklist must be CAUSAL_ELIGIBLE to claim SUPPORTED; otherwise UNCERTAIN or REFUTED."
+            )
 
     @property
     def key(self) -> str:
@@ -162,7 +169,12 @@ def from_skeptic(
         n_runs=len(runs),
         k_reruns=effect.k,
         primary_metric="verified_success_pass_k",
-        effect_size={"value": effect.value, "ci_low": effect.ci_low, "ci_high": effect.ci_high},
+        effect_size={
+            "value": effect.value,
+            "ci_low": effect.ci_low,
+            "ci_high": effect.ci_high,
+            "is_placeholder": getattr(effect, "is_placeholder", False),
+        },
         false_accept_rate=verifier.false_accept_rate,
         false_reject_rate=verifier.false_reject_rate,
         cost={
