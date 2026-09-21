@@ -85,7 +85,12 @@ class Preregistration:
 
 
 def load(prereg_id: str, root: Path | str = PREREG_DIR) -> dict:
-    p = Path(root) / f"{prereg_id}.yaml"
+    p_direct = Path(prereg_id)
+    if p_direct.exists() and p_direct.is_file():
+        p = p_direct
+    else:
+        clean_id = Path(prereg_id).stem
+        p = Path(root) / f"{clean_id}.yaml"
     if not p.exists():
         raise PreregViolation(f"no preregistration at {p} — refusing to run or analyse")
     return yaml.safe_load(p.read_text(encoding="utf-8"))

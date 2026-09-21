@@ -12,8 +12,13 @@ sys.modules['resource'] = types.ModuleType('resource')
 sys.path.insert(0, os.path.abspath('swe-smith'))
 sys.path.insert(0, os.path.abspath('.'))
 
-import swesmith.constants
-from swesmith.bug_gen.procedural.generate import main
+try:
+    import swesmith.constants
+    from swesmith.bug_gen.procedural.generate import main
+except ImportError:
+    print("[INFO] 'swesmith' package not found in sys.path. To run SWE-smith generation determinism checks, clone swe-smith into ./swe-smith (git clone https://github.com/swe-smith/swe-smith).")
+    print("[INFO] Skipping SWE-smith generator verification on minimal clone.")
+    sys.exit(0)
 
 _orig_rmtree = shutil.rmtree
 def _win_rmtree(path, *args, **kwargs):
