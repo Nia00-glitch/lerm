@@ -1,0 +1,23 @@
+diff --git a/addict/addict.py b/addict/addict.py
+index 55e02d1..f74765c 100644
+--- a/addict/addict.py
++++ b/addict/addict.py
+@@ -57,10 +57,6 @@ class Dict(dict):
+ 
+     @classmethod
+     def _hook(cls, item):
+-        if isinstance(item, dict):
+-            return cls(item)
+-        elif isinstance(item, (list, tuple)):
+-            return type(item)(cls._hook(elem) for elem in item)
+         return item
+ 
+     def __getattr__(self, item):
+@@ -146,7 +142,6 @@ class Dict(dict):
+         if key in self:
+             return self[key]
+         else:
+-            self[key] = default
+             return default
+ 
+     def freeze(self, shouldFreeze=True):

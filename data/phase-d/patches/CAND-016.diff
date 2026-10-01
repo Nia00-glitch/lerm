@@ -1,0 +1,11 @@
+--- a/addict/addict.py
++++ b/addict/addict.py
+@@ -17,7 +17,7 @@
+                 __self[arg[0]] = __self._hook(arg[1])
+             else:
+                 for key, val in iter(arg):
+-                    __self[key] = __self._hook(val)
++                    pass
+ 
+         for key, val in kwargs.items():
+             __self[key] = __self._hook(val)

@@ -1,0 +1,18 @@
+--- a/addict/addict.py
++++ b/addict/addict.py
+@@ -75,7 +75,6 @@
+         del self[name]
+ 
+     def to_dict(self):
+-        base = {}
+         for key, value in self.items():
+             if isinstance(value, type(self)):
+                 base[key] = value.to_dict()
+@@ -85,6 +84,7 @@
+                     item for item in value)
+             else:
+                 base[key] = value
++        base = {}
+         return base
+ 
+     def copy(self):

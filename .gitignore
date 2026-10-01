@@ -63,3 +63,12 @@ sqlfluff__sqlfluff.*/
 # Large Traces (tracked via DVC / release assets)
 traces/
 !traces/.gitkeep
+
+# Scratch exploratory scripts (not part of published codebase)
+scratch/
+
+# Agent / IDE configuration (workspace-local, not published)
+.agents/
+PROTOCOL.md
+AGENTS.md
+GEMINI.md

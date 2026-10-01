@@ -32,3 +32,20 @@ The following mutation classes are strictly forbidden and cause automatic candid
 ## 3. Ambiguity & Noise Mitigation
 - Every candidate mutation MUST target an implementation file (`*.py`) and must NOT touch any test files (`test_*.py`, `tests/*`).
 - Target functions must have direct test coverage in the existing unit test suite.
+
+## 4. Compound Mutation Specification (Amendment per DECISION-0006)
+
+To prevent ceiling collapse under autonomous agents equipped with interactive shell/terminal tools (which execute unit tests and read diagnostic tracebacks during Turn 1), candidate tasks may be constructed as **Compound Mutations (Higher-Order Mutations)**:
+
+1. **Composition Rule**:
+   - A compound candidate combines $M \ge 2$ procedural mutations drawn strictly from the allowed operator set (§1).
+   - Each constituent mutation must target distinct function/method AST nodes within the repository to preserve target independence (§12).
+2. **Interacting Semantics**:
+   - Constituent mutations should affect interdependent logic paths (e.g. constructor + accessor, or recursive helper hook + caller).
+   - Fixing a single isolated error from the initial pytest traceback leaves secondary failures, requiring multi-step semantic synthesis rather than trivial 1-line syntax restoration.
+3. **Fail-Closed Verification Invariants**:
+   A compound candidate must satisfy the identical 6-stage chain evaluation in `lerm.candidate_pool`:
+   - Stage 1: Clean repository passes all baseline unit tests ($X_{\text{base}} = 0$ failures).
+   - Stage 2: Compound patch applies cleanly via `git apply --whitespace=nowarn`.
+   - Stage 3: Test suite fails under the compound patch with $X_{\text{fail}} \ge 1$ assertion/logic failures.
+   - Stage 4: Reverting the compound patch restores clean pass status ($X_{\text{revert}} = 0$).

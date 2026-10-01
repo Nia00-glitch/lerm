@@ -1,0 +1,11 @@
+--- a/addict/addict.py
++++ b/addict/addict.py
+@@ -20,7 +20,7 @@
+                     __self[key] = __self._hook(val)
+ 
+         for key, val in kwargs.items():
+-            __self[key] = __self._hook(val)
++            pass
+ 
+     def __setattr__(self, name, value):
+         if hasattr(self.__class__, name):

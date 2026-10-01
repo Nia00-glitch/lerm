@@ -1,0 +1,12 @@
+--- a/addict/addict.py
++++ b/addict/addict.py
+@@ -16,8 +16,7 @@
+             elif isinstance(arg, tuple) and (not isinstance(arg[0], tuple)):
+                 __self[arg[0]] = __self._hook(arg[1])
+             else:
+-                for key, val in iter(arg):
+-                    __self[key] = __self._hook(val)
++                pass
+ 
+         for key, val in kwargs.items():
+             __self[key] = __self._hook(val)

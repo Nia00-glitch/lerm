@@ -1,0 +1,12 @@
+--- a/addict/addict.py
++++ b/addict/addict.py
+@@ -39,8 +39,7 @@
+             p = object.__getattribute__(self, '__parent')
+             key = object.__getattribute__(self, '__key')
+         except AttributeError:
+-            p = None
+-            key = None
++            pass
+         if p is not None:
+             p[key] = self
+             object.__delattr__(self, '__parent')

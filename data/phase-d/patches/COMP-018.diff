@@ -1,0 +1,26 @@
+diff --git a/addict/addict.py b/addict/addict.py
+index 55e02d1..b0d6866 100644
+--- a/addict/addict.py
++++ b/addict/addict.py
+@@ -111,9 +111,9 @@ class Dict(dict):
+             if ((k not in self) or
+                 (not isinstance(self[k], dict)) or
+                 (not isinstance(v, dict))):
+-                self[k] = v
+-            else:
+                 self[k].update(v)
++            else:
++                self[k] = v
+ 
+     def __getnewargs__(self):
+         return tuple(self.items())
+@@ -152,8 +152,7 @@ class Dict(dict):
+     def freeze(self, shouldFreeze=True):
+         object.__setattr__(self, '__frozen', shouldFreeze)
+         for key, val in self.items():
+-            if isinstance(val, Dict):
+-                val.freeze(shouldFreeze)
++            pass
+ 
+     def unfreeze(self):
+         self.freeze(False)

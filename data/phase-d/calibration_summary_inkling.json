@@ -1,0 +1,105 @@
+{
+  "protocol": "Protocol 06 \u00a72 / DECISION-0006",
+  "evaluated_at": "2026-09-30T11:05:11.570461+00:00",
+  "model": "openrouter/thinkingmachines/inkling-small:free",
+  "harness": "OpenHands agent-server single-turn",
+  "tasks": {
+    "COMP-001": {
+      "n_trials": 20,
+      "successes": 16,
+      "p_hat": 0.8,
+      "wilson_ci_95": [
+        0.584,
+        0.9193
+      ],
+      "mean_duration_s": 119.29,
+      "mean_actions_taken": 12.1,
+      "stage1_verdict": "CONTINUE_TO_STAGE_2",
+      "stage1_successes": 6,
+      "stage2_verdict": "REJECT_OUT_OF_BAND_EASY",
+      "overall_verdict": "REJECT_OUT_OF_BAND_EASY",
+      "target_band_membership": false,
+      "constituent_tasks": [
+        "CAND-001",
+        "CAND-003"
+      ],
+      "constituent_functions": [
+        "setdefault",
+        "__init__"
+      ],
+      "constituent_rules": [
+        "func_pm_remove_assign",
+        "func_pm_ctrl_invert_if"
+      ],
+      "admission_band": [
+        0.35,
+        0.65
+      ]
+    },
+    "COMP-002": {
+      "n_trials": 10,
+      "successes": 9,
+      "p_hat": 0.9,
+      "wilson_ci_95": [
+        0.5958,
+        0.9821
+      ],
+      "mean_duration_s": 217.16,
+      "mean_actions_taken": 17.5,
+      "stage1_verdict": "REJECT_CEILING",
+      "stage1_successes": 9,
+      "overall_verdict": "REJECT_CEILING",
+      "target_band_membership": false,
+      "constituent_tasks": [
+        "CAND-001",
+        "CAND-006"
+      ],
+      "constituent_functions": [
+        "setdefault",
+        "_hook"
+      ],
+      "constituent_rules": [
+        "func_pm_remove_assign",
+        "func_pm_remove_cond"
+      ],
+      "admission_band": [
+        0.35,
+        0.65
+      ]
+    },
+    "COMP-003": {
+      "n_trials": 10,
+      "successes": 10,
+      "p_hat": 1.0,
+      "wilson_ci_95": [
+        0.7225,
+        1.0
+      ],
+      "mean_duration_s": 174.46,
+      "mean_actions_taken": 14.0,
+      "stage1_verdict": "REJECT_CEILING",
+      "stage1_successes": 10,
+      "overall_verdict": "REJECT_CEILING",
+      "target_band_membership": false,
+      "constituent_tasks": [
+        "CAND-001",
+        "CAND-008"
+      ],
+      "constituent_functions": [
+        "setdefault",
+        "freeze"
+      ],
+      "constituent_rules": [
+        "func_pm_remove_assign",
+        "func_pm_remove_cond"
+      ],
+      "admission_band": [
+        0.35,
+        0.65
+      ]
+    }
+  },
+  "daily_trials_completed": 20,
+  "daily_quota_cap": 20,
+  "daily_quota_status": "EXHAUSTED_SAFELY_FOR_TODAY"
+}

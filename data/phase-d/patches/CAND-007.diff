@@ -1,0 +1,19 @@
+--- a/addict/addict.py
++++ b/addict/addict.py
+@@ -101,7 +101,6 @@
+         return other
+ 
+     def update(self, *args, **kwargs):
+-        other = {}
+         if args:
+             if len(args) > 1:
+                 raise TypeError()
+@@ -111,7 +110,7 @@
+             if ((k not in self) or
+                 (not isinstance(self[k], dict)) or
+                 (not isinstance(v, dict))):
+-                self[k] = v
++                pass
+             else:
+                 self[k].update(v)
+ 

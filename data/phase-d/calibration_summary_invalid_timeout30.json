@@ -1,0 +1,86 @@
+[
+  {
+    "task_id": "CAND-001",
+    "mutation_rule": "func_pm_remove_assign",
+    "decision": "REJECT_FLOOR",
+    "p_hat": 0.0,
+    "ci_95": [
+      0.0,
+      0.278
+    ],
+    "trials_run": 10,
+    "successes": 0
+  },
+  {
+    "task_id": "CAND-003",
+    "mutation_rule": "func_pm_ctrl_invert_if",
+    "decision": "REJECT_FLOOR",
+    "p_hat": 0.0,
+    "ci_95": [
+      0.0,
+      0.278
+    ],
+    "trials_run": 10,
+    "successes": 0
+  },
+  {
+    "task_id": "CAND-006",
+    "mutation_rule": "func_pm_remove_cond",
+    "decision": "REJECT_FLOOR",
+    "p_hat": 0.0,
+    "ci_95": [
+      0.0,
+      0.278
+    ],
+    "trials_run": 10,
+    "successes": 0
+  },
+  {
+    "task_id": "CAND-008",
+    "mutation_rule": "func_pm_remove_cond",
+    "decision": "REJECT_FLOOR",
+    "p_hat": 0.0,
+    "ci_95": [
+      0.0,
+      0.278
+    ],
+    "trials_run": 10,
+    "successes": 0
+  },
+  {
+    "task_id": "CAND-009",
+    "mutation_rule": "func_pm_ctrl_shuffle",
+    "decision": "REJECT_FLOOR",
+    "p_hat": 0.0,
+    "ci_95": [
+      0.0,
+      0.278
+    ],
+    "trials_run": 10,
+    "successes": 0
+  },
+  {
+    "task_id": "CAND-021",
+    "mutation_rule": "func_pm_remove_assign",
+    "decision": "REJECT_FLOOR",
+    "p_hat": 0.0,
+    "ci_95": [
+      0.0,
+      0.278
+    ],
+    "trials_run": 10,
+    "successes": 0
+  },
+  {
+    "task_id": "CAND-026",
+    "mutation_rule": "func_pm_ctrl_invert_if",
+    "decision": "REJECT_FLOOR",
+    "p_hat": 0.0,
+    "ci_95": [
+      0.0,
+      0.278
+    ],
+    "trials_run": 10,
+    "successes": 0
+  }
+]

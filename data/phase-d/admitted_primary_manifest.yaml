@@ -1,0 +1,6 @@
+schema_version: "1.0.0"
+manifest_id: "EXP-LOOP-003-ADMITTED-PRIMARY"
+calibrated_at: "2026-09-26T07:33:12.670884+00:00"
+calibration_model: "qwen2.5-coder:1.5b"
+total_admitted: 0
+tasks:

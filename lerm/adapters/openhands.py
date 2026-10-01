@@ -29,23 +29,32 @@ class AdapterError(RuntimeError):
 
 
 def _request(url: str, method: str = "GET", headers: dict | None = None,
-             body: dict | None = None, timeout: float = 60.0) -> tuple[int, Any]:
+             body: dict | None = None, timeout: float = 60.0, max_retries: int = 3) -> tuple[int, Any]:
     data = json.dumps(body).encode() if body is not None else None
-    req = urllib.request.Request(url, data=data, method=method)
-    req.add_header("Content-Type", "application/json")
-    for k, v in (headers or {}).items():
-        req.add_header(k, v)
-    try:
-        with urllib.request.urlopen(req, timeout=timeout) as resp:
-            raw = resp.read().decode("utf-8", "replace")
-            try:
-                return resp.status, json.loads(raw)
-            except json.JSONDecodeError:
-                return resp.status, raw
-    except urllib.error.HTTPError as e:
-        return e.code, e.read().decode("utf-8", "replace")
-    except urllib.error.URLError as e:
-        raise AdapterError(f"{url} unreachable: {e.reason}") from e
+    for attempt in range(max_retries + 1):
+        req = urllib.request.Request(url, data=data, method=method)
+        req.add_header("Content-Type", "application/json")
+        for k, v in (headers or {}).items():
+            req.add_header(k, v)
+        try:
+            with urllib.request.urlopen(req, timeout=timeout) as resp:
+                raw = resp.read().decode("utf-8", "replace")
+                try:
+                    return resp.status, json.loads(raw)
+                except json.JSONDecodeError:
+                    return resp.status, raw
+        except urllib.error.HTTPError as e:
+            if e.code == 429 and attempt < max_retries:
+                time.sleep(2.0 * (attempt + 1))
+                continue
+            return e.code, e.read().decode("utf-8", "replace")
+        except (urllib.error.URLError, TimeoutError, OSError) as e:
+            if attempt < max_retries:
+                time.sleep(2.0 * (attempt + 1))
+                continue
+            raise AdapterError(f"{url} unreachable or timed out: {e}") from e
+    return 500, "Max retries exceeded"
+
 
 
 @dataclass
@@ -155,17 +164,21 @@ class OpenHandsAgent:
             task_id = body.get("id")
             t_info: dict = {}
             for _ in range(120):
-                s, t_resp = _request(
-                    f"{self.base_url}/api/v1/app-conversations/start-tasks?ids={task_id}",
-                    headers=self.headers,
-                )
-                if s < 400 and isinstance(t_resp, list) and t_resp and t_resp[0]:
-                    t_info = t_resp[0]
-                    if t_info.get("app_conversation_id"):
-                        return str(t_info["app_conversation_id"])
-                    if str(t_info.get("status")).upper() in {"FAILED", "ERROR"}:
-                        raise AdapterError(f"start task failed: {t_info}")
-                time.sleep(1.0)
+                try:
+                    s, t_resp = _request(
+                        f"{self.base_url}/api/v1/app-conversations/start-tasks?ids={task_id}",
+                        headers=self.headers,
+                        timeout=15.0,
+                    )
+                    if s < 400 and isinstance(t_resp, list) and t_resp and t_resp[0]:
+                        t_info = t_resp[0]
+                        if t_info.get("app_conversation_id"):
+                            return str(t_info["app_conversation_id"])
+                        if str(t_info.get("status")).upper() in {"FAILED", "ERROR"}:
+                            raise AdapterError(f"start task failed: {t_info}")
+                except Exception:
+                    pass
+                time.sleep(2.5)
             if t_info and t_info.get("app_conversation_id"):
                 return str(t_info["app_conversation_id"])
             raise AdapterError(f"timed out waiting for conversation startup: {t_info or task_id}")
@@ -233,11 +246,14 @@ class OpenHandsAgent:
 
     def activate_profile(self, profile_name: str) -> bool:
         """Globally activate a named LLM profile (e.g. 'Ollama-1.5b' or 'Ollama-14b') without restarting."""
-        status, _ = _request(
-            f"{self.base_url}/api/v1/settings/profiles/{profile_name}/activate",
-            method="POST", headers=self.headers, timeout=15,
-        )
-        return status < 400
+        try:
+            status, _ = _request(
+                f"{self.base_url}/api/v1/settings/profiles/{profile_name}/activate",
+                method="POST", headers=self.headers, timeout=30.0,
+            )
+            return status < 400
+        except Exception:
+            return False
 
     def switch_conversation_profile(self, conversation_id: str, profile_name: str) -> bool:
         """Switch an active conversation's LLM to a saved profile on the fly."""

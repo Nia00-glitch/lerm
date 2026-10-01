@@ -1,0 +1,27 @@
+diff --git a/addict/addict.py b/addict/addict.py
+index 55e02d1..05285bc 100644
+--- a/addict/addict.py
++++ b/addict/addict.py
+@@ -57,10 +57,6 @@ class Dict(dict):
+ 
+     @classmethod
+     def _hook(cls, item):
+-        if isinstance(item, dict):
+-            return cls(item)
+-        elif isinstance(item, (list, tuple)):
+-            return type(item)(cls._hook(elem) for elem in item)
+         return item
+ 
+     def __getattr__(self, item):
+@@ -111,9 +107,9 @@ class Dict(dict):
+             if ((k not in self) or
+                 (not isinstance(self[k], dict)) or
+                 (not isinstance(v, dict))):
+-                self[k] = v
+-            else:
+                 self[k].update(v)
++            else:
++                self[k] = v
+ 
+     def __getnewargs__(self):
+         return tuple(self.items())

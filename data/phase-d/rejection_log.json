@@ -1,0 +1,77 @@
+[
+  {
+    "task_id": "CAND-012",
+    "reason": "duplicate_mutation",
+    "detail": "Duplicate mutation_id 'func_pm_ctrl_invert_if__c8ckyrzf'"
+  },
+  {
+    "task_id": "CAND-019",
+    "reason": "duplicate_mutation",
+    "detail": "Duplicate mutation_id 'func_pm_remove_loop__s7f5tamm'"
+  },
+  {
+    "task_id": "CAND-019",
+    "reason": "duplicate_mutation",
+    "detail": "Duplicate mutation_id 'func_pm_remove_assign__210n2kyn'"
+  },
+  {
+    "task_id": "CAND-019",
+    "reason": "duplicate_mutation",
+    "detail": "Duplicate mutation_id 'func_pm_remove_cond__3mr6dvhg'"
+  },
+  {
+    "task_id": "CAND-021",
+    "reason": "mutation_no_effect",
+    "detail": "Mutation did not produce test failure (exit=0)"
+  },
+  {
+    "task_id": "CAND-021",
+    "reason": "infrastructure_failure",
+    "detail": "Infrastructure failure on mutation: INFRA_ERROR: git apply failed: error: patch failed: addict/addict.py:151\nerror: addict/addict.py: patch does not apply\n"
+  },
+  {
+    "task_id": "CAND-021",
+    "reason": "duplicate_mutation",
+    "detail": "Duplicate mutation_id 'func_pm_remove_assign__210n2kyn'"
+  },
+  {
+    "task_id": "CAND-023",
+    "reason": "duplicate_mutation",
+    "detail": "Duplicate mutation_id 'func_pm_ctrl_shuffle__1ak761sq'"
+  },
+  {
+    "task_id": "CAND-025",
+    "reason": "duplicate_mutation",
+    "detail": "Duplicate mutation_id 'func_pm_remove_loop__ppusgue9'"
+  },
+  {
+    "task_id": "CAND-026",
+    "reason": "duplicate_mutation",
+    "detail": "Duplicate mutation_id 'func_pm_remove_cond__ravv2b4c'"
+  },
+  {
+    "task_id": "CAND-028",
+    "reason": "duplicate_mutation",
+    "detail": "Duplicate mutation_id 'func_pm_remove_assign__xoywv07k'"
+  },
+  {
+    "task_id": "CAND-028",
+    "reason": "duplicate_mutation",
+    "detail": "Duplicate mutation_id 'func_pm_remove_cond__91442zil'"
+  },
+  {
+    "task_id": "CAND-028",
+    "reason": "duplicate_mutation",
+    "detail": "Duplicate mutation_id 'func_pm_remove_loop__s7f5tamm'"
+  },
+  {
+    "task_id": "CAND-030",
+    "reason": "duplicate_mutation",
+    "detail": "Duplicate mutation_id 'func_pm_ctrl_invert_if__c8ckyrzf'"
+  },
+  {
+    "task_id": "CAND-030",
+    "reason": "duplicate_mutation",
+    "detail": "Duplicate mutation_id 'func_pm_remove_assign__rcw8507l'"
+  }
+]

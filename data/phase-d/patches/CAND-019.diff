@@ -1,0 +1,24 @@
+--- a/addict/addict.py
++++ b/addict/addict.py
+@@ -101,12 +101,10 @@
+         return other
+ 
+     def update(self, *args, **kwargs):
+-        other = {}
+         if args:
+             if len(args) > 1:
+                 raise TypeError()
+             other.update(args[0])
+-        other.update(kwargs)
+         for k, v in other.items():
+             if ((k not in self) or
+                 (not isinstance(self[k], dict)) or
+@@ -114,6 +112,8 @@
+                 self[k] = v
+             else:
+                 self[k].update(v)
++        other.update(kwargs)
++        other = {}
+ 
+     def __getnewargs__(self):
+         return tuple(self.items())

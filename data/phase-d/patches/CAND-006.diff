@@ -1,0 +1,13 @@
+--- a/addict/addict.py
++++ b/addict/addict.py
+@@ -57,10 +57,6 @@
+ 
+     @classmethod
+     def _hook(cls, item):
+-        if isinstance(item, dict):
+-            return cls(item)
+-        elif isinstance(item, (list, tuple)):
+-            return type(item)(cls._hook(elem) for elem in item)
+         return item
+ 
+     def __getattr__(self, item):

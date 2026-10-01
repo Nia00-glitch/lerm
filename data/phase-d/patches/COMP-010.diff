@@ -1,0 +1,27 @@
+diff --git a/addict/addict.py b/addict/addict.py
+index 55e02d1..dff00b3 100644
+--- a/addict/addict.py
++++ b/addict/addict.py
+@@ -14,10 +14,10 @@ class Dict(dict):
+                 for key, val in arg.items():
+                     __self[key] = __self._hook(val)
+             elif isinstance(arg, tuple) and (not isinstance(arg[0], tuple)):
+-                __self[arg[0]] = __self._hook(arg[1])
+-            else:
+                 for key, val in iter(arg):
+                     __self[key] = __self._hook(val)
++            else:
++                __self[arg[0]] = __self._hook(arg[1])
+ 
+         for key, val in kwargs.items():
+             __self[key] = __self._hook(val)
+@@ -39,8 +39,7 @@ class Dict(dict):
+             p = object.__getattribute__(self, '__parent')
+             key = object.__getattribute__(self, '__key')
+         except AttributeError:
+-            p = None
+-            key = None
++            pass
+         if p is not None:
+             p[key] = self
+             object.__delattr__(self, '__parent')

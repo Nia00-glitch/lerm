@@ -1,0 +1,13 @@
+--- a/addict/addict.py
++++ b/addict/addict.py
+@@ -102,10 +102,6 @@
+ 
+     def update(self, *args, **kwargs):
+         other = {}
+-        if args:
+-            if len(args) > 1:
+-                raise TypeError()
+-            other.update(args[0])
+         other.update(kwargs)
+         for k, v in other.items():
+             if ((k not in self) or

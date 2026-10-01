@@ -1,0 +1,14 @@
+--- a/addict/addict.py
++++ b/addict/addict.py
+@@ -111,9 +111,9 @@
+             if ((k not in self) or
+                 (not isinstance(self[k], dict)) or
+                 (not isinstance(v, dict))):
++                self[k].update(v)
++            else:
+                 self[k] = v
+-            else:
+-                self[k].update(v)
+ 
+     def __getnewargs__(self):
+         return tuple(self.items())

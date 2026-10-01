@@ -36,3 +36,13 @@ To avoid ceiling tasks (trivially solved in Turn 1) and floor tasks (impossible 
 - All candidates satisfying the admission rule enter the primary pool.
 - Rejected candidates are logged with their deterministic rejection category and NEVER re-tested.
 - No adaptive re-generation or post-hoc threshold tuning is permitted.
+
+## 4. Autonomous Tool Capability & Paced Execution (Amendment per DECISION-0006)
+
+1. **Tool-Enabled Turn-1 Capability**:
+   - The agent operates in OpenHands with full access to terminal and file-editing tools.
+   - Running test commands (e.g. `pytest`) and reading tracebacks within the agent's single conversation turn is recognized as part of the agent's native reasoning process during Turn 1.
+   - Purity at the outer controller level remains strictly enforced: exactly 1 user message, 0 outer controller feedback retries, 0 external verifier injections (`condition="single_shot_calibration"`, `attempts=1`, `turns_taken=1`, `verifier_calls=0`, `feedback_injected=False`, `retry_count=0`).
+2. **Execution Pacing & Daily Quota Discipline**:
+   - Free-tier inference (`openrouter/thinkingmachines/inkling-small:free`) enforces a 200 requests/day quota and 20 RPM limit.
+   - Calibration runs must be throttled with $\ge 5.0\text{s}$ pause between trials and capped at $\le 15$ trials per calendar day ($\sim 150$ LLM completions), distributing cohort calibration across consecutive days to prevent HTTP 429 quota exhaustion.

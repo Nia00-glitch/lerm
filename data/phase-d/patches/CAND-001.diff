@@ -1,0 +1,10 @@
+--- a/addict/addict.py
++++ b/addict/addict.py
+@@ -146,7 +146,6 @@
+         if key in self:
+             return self[key]
+         else:
+-            self[key] = default
+             return default
+ 
+     def freeze(self, shouldFreeze=True):

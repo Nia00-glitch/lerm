@@ -1,0 +1,20 @@
+--- a/addict/addict.py
++++ b/addict/addict.py
+@@ -5,8 +5,6 @@
+ 
+     def __init__(__self, *args, **kwargs):
+         object.__setattr__(__self, '__parent', kwargs.pop('__parent', None))
+-        object.__setattr__(__self, '__key', kwargs.pop('__key', None))
+-        object.__setattr__(__self, '__frozen', False)
+         for arg in args:
+             if not arg:
+                 continue
+@@ -21,6 +19,8 @@
+ 
+         for key, val in kwargs.items():
+             __self[key] = __self._hook(val)
++        object.__setattr__(__self, '__frozen', False)
++        object.__setattr__(__self, '__key', kwargs.pop('__key', None))
+ 
+     def __setattr__(self, name, value):
+         if hasattr(self.__class__, name):

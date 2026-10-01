@@ -1,0 +1,41 @@
+[
+  {
+    "task_id": "COMP-001",
+    "rejection_reason": "REJECT_OUT_OF_BAND_EASY",
+    "stage": 2,
+    "n_trials": 20,
+    "successes": 16,
+    "p_hat": 0.8,
+    "wilson_ci_95": [
+      0.584,
+      0.9193
+    ],
+    "timestamp": "2026-09-30T11:05:11.570061+00:00"
+  },
+  {
+    "task_id": "COMP-002",
+    "rejection_reason": "REJECT_CEILING",
+    "stage": 1,
+    "n_trials": 10,
+    "successes": 9,
+    "p_hat": 0.9,
+    "wilson_ci_95": [
+      0.5958,
+      0.9821
+    ],
+    "timestamp": "2026-09-30T11:05:11.570199+00:00"
+  },
+  {
+    "task_id": "COMP-003",
+    "rejection_reason": "REJECT_CEILING",
+    "stage": 1,
+    "n_trials": 10,
+    "successes": 10,
+    "p_hat": 1.0,
+    "wilson_ci_95": [
+      0.7225,
+      1.0
+    ],
+    "timestamp": "2026-09-30T11:05:11.570307+00:00"
+  }
+]

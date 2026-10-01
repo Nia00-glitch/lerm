@@ -42,10 +42,10 @@ Repositories are excluded if:
 | Repository Name | Commit SHA | Unit Tests | Baseline Runtime | Status | Notes |
 |---|---|---|---|---|---|
 | `mewwts__addict.75284f95` | `75284f95` | 128 passed | 0.33s | **ELIGIBLE** | Verified 100% reproducible baseline. |
-| `marshmallow-code__marshmallow.9716fc62` | `9716fc62` | 421 entities | 2.15s | **ELIGIBLE** | Verified compatible AST parsing. |
-| `sqlfluff__sqlfluff.50a1c4b6` | `50a1c4b6` | 3126 entities | 4.80s | **ELIGIBLE** | High-complexity SQL parsing library. |
+| `marshmallow-code__marshmallow.9716fc62` | `9716fc62` | 421 entities | N/A | **EXCLUDED (`BASELINE_FAIL`)** | `simplejson` unpinned optional test dep; no lockfile at pinned commit. Clean offline checkout fails `import simplejson`. |
+| `sqlfluff__sqlfluff.50a1c4b6` | `50a1c4b6` | 3126 entities | N/A | **EXCLUDED (`BASELINE_FAIL`)** | Requires `pip install -e .` with floating deps (`tblib`, `diff-cover`, etc.); no lockfile at pinned commit. Clean offline checkout fails `import sqlfluff`. |
 | `pvlib/pvlib-python` | N/A | N/A | N/A | **EXCLUDED** | Reason: `UNREGISTERED_IN_SWESMITH`. |
 
 ## 4. Sampling Randomization Seed
 - Candidate repositories are indexed deterministically.
-- Selection order across repositories is fixed prior to candidate generation using `PRNG_SEED_REPO = 10001`.
+- Selection order across repositories is fixed prior to candidate generation using the hierarchically derived seed from Protocol 05: `PRNG_SEED_REPO = 61022` (`(MASTER_SEED + 101) % 100000`, where `MASTER_SEED = 20260921`).
